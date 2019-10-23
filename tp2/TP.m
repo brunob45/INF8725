@@ -105,11 +105,14 @@
         %appliquée sur sa transformée de Fourier.
         
 %% Exercice 4
+    clear all;
+    close all;
+    clc;
     %Numero 1
         img = imread('images\maillot.png');
-        tfd = fftshift(fft2(img));
+        tfd = (fft2(img));
         figure;
-        imshow(log(1+abs(tfd)), []);
+        imshow(log(1+abs(fftshift(tfd))), []);
         
     %Numero 2
         figure;
@@ -122,17 +125,38 @@
         imshow(imgfb);
         
     %Numero 4
-        filtrehaut = (double(imread('images\filtre_maillot2.png')))/255;
+        filtrehaut = fspecial('laplacian');
         imgfh = imfilter(img, filtrehaut, 'same');
         figure;
         imshow(imgfh)
         
     %Numero 5
-        tfdf = imfilter(tfd, filtrehaut, 'same');
-        img5 = ifft2(tfdf);
+        filtreideal = double(rgb2gray(imread('images\untitled3.png')))/255;
+        atfd = abs(tfd);
+        tfdf = fftshift(tfd).*filtreideal;
+        img5 = ifft2(ifftshift(tfdf));
         figure;
-        imshow(img5);
+        imshow(img5, []);
         
+    %Numero 6
+        filtreideal = double(rgb2gray(imread('images\untitled4.png')))/255;
+        atfd = abs(tfd);
+        tfdf = fftshift(tfd).*filtreideal;
+        img5 = ifft2(ifftshift(tfdf));
+        figure;
+        imshow(img5, []);
+        
+    
+    %Numero 7
+        %Le filtre de butterworth ajoute du flou dans l'image mais n'ajoute
+        %pas d'artéfacte contrairement au filtre idéal.
+        
+    %Numero 8
+        %Cela ressemble a un filtre passe-haut très faible, où les contours
+        %sont préservés et les couleurs tendent vers la moyenne.
+        
+    %Numero 9
+        %C'est un filtre passe-haut.
         
         
 %% Fonctions

@@ -1,0 +1,554 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>TP</title><meta name="generator" content="MATLAB 9.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-10-23"><meta name="DC.source" content="TP.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Nettoyage du Workspace</a></li><li><a href="#2">Exercice 1</a></li><li><a href="#3">Exercice 2</a></li><li><a href="#4">Exercice 3</a></li><li><a href="#5">Exercice 4</a></li><li><a href="#6">Fonctions</a></li></ul></div><h2 id="1">Nettoyage du Workspace</h2><pre class="codeinput">    clear <span class="string">all</span>;
+    close <span class="string">all</span>;
+    clc;
+</pre><h2 id="2">Exercice 1</h2><pre class="codeinput">    <span class="comment">%%Numero 1</span>
+
+        img = imread(<span class="string">'images\theArtist.png'</span>);
+
+        figure;
+        imshow(img);
+
+        img = Egalisation_Histogramme(img);
+        figure;
+        imshow(uint8(img));
+
+    <span class="comment">%%Numero 2</span>
+        <span class="comment">% voir fonction Convolution</span>
+
+    <span class="comment">%%Numero 3</span>
+
+        gaussien = (1/90) * [1,2,1,2,1;
+                             2,4,8,4,2;
+                             1,8,18,8,1;
+                             2,4,8,4,2;
+                             1,2,1,2,1];
+
+        img = Convolution(img, gaussien);
+
+        figure;
+        imshow(uint8(img));
+
+    <span class="comment">%%Numero 4</span>
+
+        [img, lap] = Rehaussement_Contour(img,0.3);
+
+        <span class="keyword">for</span> i=1:size(img,1)
+            <span class="keyword">for</span> j=1:size(img,2)
+                lap(i,j) = max(lap(i,j), 0);
+                img(i,j) = max(img(i,j), 0);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        figure;
+        subplot(1,2,1);
+        imshow(uint8(lap));
+        subplot(1,2,2);
+        imshow(uint8(img));
+
+    <span class="comment">%%Numero 5</span>
+        <span class="comment">% Lorsqu'on rehausse les contours de l'image, nous faisons</span>
+        <span class="comment">% r&eacute;apparaitre du bruit sel dans l'image. Pour contrer ce bruit,</span>
+        <span class="comment">% nous pourrions utiliser un filtre "Median".</span>
+</pre><img vspace="5" hspace="5" src="TP_01.png" alt=""> <img vspace="5" hspace="5" src="TP_02.png" alt=""> <img vspace="5" hspace="5" src="TP_03.png" alt=""> <img vspace="5" hspace="5" src="TP_04.png" alt=""> <h2 id="3">Exercice 2</h2><pre class="codeinput">    clear <span class="string">all</span>;
+    close <span class="string">all</span>;
+    clc;
+
+    <span class="comment">%%Numero 1</span>
+        img = rgb2gray(imread(<span class="string">'images\pieces.jpg'</span>));
+
+    <span class="comment">%%Numero 2</span>
+        imshow(uint8(img));
+        img = Binariser(img, 250);
+        figure;
+        imshow(uint8(img));
+
+    <span class="comment">%%Numero 3</span>
+        img = imclose(img, strel(<span class="string">'disk'</span>,10));
+        figure;
+        imshow(uint8(img));
+
+    <span class="comment">%%Numero 4</span>
+        monnaie = Compter_Monnaie(img);
+        <span class="comment">% la valeur de retour est un array contenant le nombre pour chaque</span>
+        <span class="comment">% piece de monnaie [5, 10, 25, 2.00]</span>
+</pre><img vspace="5" hspace="5" src="TP_05.png" alt=""> <img vspace="5" hspace="5" src="TP_06.png" alt=""> <img vspace="5" hspace="5" src="TP_07.png" alt=""> <h2 id="4">Exercice 3</h2><pre class="codeinput">    <span class="comment">%%Numero 1</span>
+        imgv = imread(<span class="string">'images\Barres_Verticales.png'</span>);
+        imgh = imread(<span class="string">'images\Barres_Horizontales.png'</span>);
+        imgo = imread(<span class="string">'images\Barres_Obliques.png'</span>);
+
+    <span class="comment">%%Numero 2</span>
+        fftv = abs(fftshift(fft2(imgv)));
+        ffth = abs(fftshift(fft2(imgh)));
+        ffto = abs(fftshift(fft2(imgo)));
+        imshow(log(1+fftv), []);
+        figure;
+        imshow(log(1+ffth), []);
+        figure;
+        imshow(log(1+ffto), []);
+
+    <span class="comment">%Numero 3</span>
+        imgr = imrotate(imgv, 70, <span class="string">'bilinear'</span>, <span class="string">'crop'</span>);
+        fftr = abs(fftshift(fft2(imgr)));
+        figure;
+        imshow(log(1+fftr), []);
+
+    <span class="comment">%Numero 4</span>
+        <span class="comment">%En appliquant une rotation sur une image, la m&ecirc;me rotation est</span>
+        <span class="comment">%appliqu&eacute;e sur sa transform&eacute;e de Fourier.</span>
+</pre><img vspace="5" hspace="5" src="TP_08.png" alt=""> <img vspace="5" hspace="5" src="TP_09.png" alt=""> <img vspace="5" hspace="5" src="TP_10.png" alt=""> <img vspace="5" hspace="5" src="TP_11.png" alt=""> <h2 id="5">Exercice 4</h2><pre class="codeinput">    clear <span class="string">all</span>;
+    close <span class="string">all</span>;
+    clc;
+    <span class="comment">%Numero 1</span>
+        img = imread(<span class="string">'images\maillot.png'</span>);
+        tfd = (fft2(img));
+        figure;
+        imshow(log(1+abs(fftshift(tfd))), []);
+
+    <span class="comment">%Numero 2</span>
+        figure;
+        imshow(imread(<span class="string">'images\schema.png'</span>));
+
+    <span class="comment">%Numero 3</span>
+        filtrebas = fspecial(<span class="string">'gaussian'</span>, [551,777], 2);
+        imgfb = imfilter(img, filtrebas, <span class="string">'same'</span>);
+        figure;
+        imshow(imgfb);
+
+    <span class="comment">%Numero 4</span>
+        filtrehaut = fspecial(<span class="string">'laplacian'</span>);
+        imgfh = imfilter(img, filtrehaut, <span class="string">'same'</span>);
+        figure;
+        imshow(imgfh)
+
+    <span class="comment">%Numero 5</span>
+        filtreideal = double(rgb2gray(imread(<span class="string">'images\untitled3.png'</span>)))/255;
+        atfd = abs(tfd);
+        tfdf = fftshift(tfd).*filtreideal;
+        img5 = ifft2(ifftshift(tfdf));
+        figure;
+        imshow(img5, []);
+
+    <span class="comment">%Numero 6</span>
+        filtreideal = double(rgb2gray(imread(<span class="string">'images\untitled4.png'</span>)))/255;
+        atfd = abs(tfd);
+        tfdf = fftshift(tfd).*filtreideal;
+        img5 = ifft2(ifftshift(tfdf));
+        figure;
+        imshow(img5, []);
+
+
+    <span class="comment">%Numero 7</span>
+        <span class="comment">%Le filtre de butterworth ajoute du flou dans l'image mais n'ajoute</span>
+        <span class="comment">%pas d'art&eacute;facte contrairement au filtre id&eacute;al.</span>
+
+    <span class="comment">%Numero 8</span>
+        <span class="comment">%Cela ressemble a un filtre passe-haut tr&egrave;s faible, o&ugrave; les contours</span>
+        <span class="comment">%sont pr&eacute;serv&eacute;s et les couleurs tendent vers la moyenne.</span>
+
+    <span class="comment">%Numero 9</span>
+        <span class="comment">%C'est un filtre passe-haut.</span>
+</pre><pre class="codeoutput">Warning: Displaying real part of complex input. 
+Warning: Displaying real part of complex input. 
+</pre><img vspace="5" hspace="5" src="TP_12.png" alt=""> <img vspace="5" hspace="5" src="TP_13.png" alt=""> <img vspace="5" hspace="5" src="TP_14.png" alt=""> <img vspace="5" hspace="5" src="TP_15.png" alt=""> <img vspace="5" hspace="5" src="TP_16.png" alt=""> <img vspace="5" hspace="5" src="TP_17.png" alt=""> <h2 id="6">Fonctions</h2><pre class="codeinput"><span class="keyword">function</span>[result] = Egalisation_Histogramme(img)
+        [h,count] = imhist(img);
+        hnorm = h/(size(img,1)*size(img,2));
+
+        result = zeros(548,1000);
+
+        <span class="keyword">for</span> i=1:size(img,1)
+            <span class="keyword">for</span> j=1:size(img,2)
+                sum = 0;
+                <span class="keyword">for</span> k=1:img(i,j)
+                    sum = sum + hnorm(k);
+                <span class="keyword">end</span>
+                result(i,j) = 255*sum;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span>[result] = Convolution(img, masque)
+    m = uint64(size(masque,1)/2);
+    n = uint64(size(masque,2)/2);
+
+    masque = rot90(masque, 2);
+    result = zeros(size(img,1),size(img,2));
+
+    <span class="keyword">for</span> i=m:(size(img,1)-m+1)
+        <span class="keyword">for</span> j=n:(size(img,2)-n+1)
+            submatrix = img(i-m+1:i+m-1, j-n+1:j+n-1);
+            mat = double(submatrix).*masque;
+            s = sum(mat, <span class="string">'all'</span>);
+            result(i,j) = s;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span>[result, lap] = Rehaussement_Contour(img,k)
+
+        gaussien = (1/16) * [1,2,1;
+                             2,4,2;
+                             1,2,1];
+
+        laplacien = [-1,-1,-1;
+                     -1,8,-1;
+                     -1,-1,-1];
+
+        lap = Convolution(img,laplacien);
+
+        result = Convolution(img,gaussien) + k * lap;
+<span class="keyword">end</span>
+
+<span class="keyword">function</span>[result] = Binariser(img, k)
+    result = zeros(size(img,1),size(img,2));
+    <span class="keyword">for</span> i=1:size(img,1)
+        <span class="keyword">for</span> j=1:size(img,2)
+            <span class="keyword">if</span> img(i,j) &gt; k
+                result(i,j) = 0;
+            <span class="keyword">else</span>
+                result(i,j) = 255;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span>[result] = Compter_Monnaie(img)
+    img = imerode(img, strel(<span class="string">'disk'</span>,80)); <span class="comment">%80</span>
+    [L,dix] = bwlabel(img);
+
+    img = imerode(img, strel(<span class="string">'disk'</span>,20)); <span class="comment">%100</span>
+    [L,cinq] = bwlabel(img);
+
+    img = imerode(img, strel(<span class="string">'disk'</span>,15)); <span class="comment">%115</span>
+    [L,vcinq] = bwlabel(img);
+
+    img = imerode(img, strel(<span class="string">'disk'</span>,25)); <span class="comment">%130</span>
+    [L,deux] = bwlabel(img);
+
+    img = imerode(img, strel(<span class="string">'disk'</span>,20)); <span class="comment">%150</span>
+    [L,cookie] = bwlabel(img);
+
+    dix = dix - cinq;
+    cinq = cinq - vcinq;
+    vcinq = vcinq - deux;
+    deux = deux - cookie;
+    result = [cinq, dix, vcinq, deux];
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Nettoyage du Workspace
+    clear all;
+    close all;
+    clc;
+
+%% Exercice 1
+
+    %%Numero 1
+    
+        img = imread('images\theArtist.png');        
+        
+        figure;
+        imshow(img);
+        
+        img = Egalisation_Histogramme(img);
+        figure;
+        imshow(uint8(img));
+        
+    %%Numero 2
+        % voir fonction Convolution
+        
+    %%Numero 3
+        
+        gaussien = (1/90) * [1,2,1,2,1;
+                             2,4,8,4,2;
+                             1,8,18,8,1;
+                             2,4,8,4,2;
+                             1,2,1,2,1];
+        
+        img = Convolution(img, gaussien);
+        
+        figure;
+        imshow(uint8(img));
+        
+    %%Numero 4
+        
+        [img, lap] = Rehaussement_Contour(img,0.3);
+        
+        for i=1:size(img,1)
+            for j=1:size(img,2)
+                lap(i,j) = max(lap(i,j), 0);
+                img(i,j) = max(img(i,j), 0);
+            end
+        end
+        
+        figure;
+        subplot(1,2,1);
+        imshow(uint8(lap));
+        subplot(1,2,2);
+        imshow(uint8(img));
+        
+    %%Numero 5
+        % Lorsqu'on rehausse les contours de l'image, nous faisons
+        % réapparaitre du bruit sel dans l'image. Pour contrer ce bruit,
+        % nous pourrions utiliser un filtre "Median".
+        
+%% Exercice 2
+    clear all;
+    close all;
+    clc;
+    
+    %%Numero 1
+        img = rgb2gray(imread('images\pieces.jpg'));
+    
+    %%Numero 2
+        imshow(uint8(img));
+        img = Binariser(img, 250);
+        figure;
+        imshow(uint8(img));
+        
+    %%Numero 3
+        img = imclose(img, strel('disk',10));
+        figure;
+        imshow(uint8(img));
+        
+    %%Numero 4
+        monnaie = Compter_Monnaie(img);
+        % la valeur de retour est un array contenant le nombre pour chaque
+        % piece de monnaie [5, 10, 25, 2.00]
+        
+%% Exercice 3
+    %%Numero 1
+        imgv = imread('images\Barres_Verticales.png');
+        imgh = imread('images\Barres_Horizontales.png');
+        imgo = imread('images\Barres_Obliques.png');
+        
+    %%Numero 2
+        fftv = abs(fftshift(fft2(imgv)));
+        ffth = abs(fftshift(fft2(imgh)));
+        ffto = abs(fftshift(fft2(imgo)));
+        imshow(log(1+fftv), []);
+        figure;
+        imshow(log(1+ffth), []);
+        figure;
+        imshow(log(1+ffto), []);
+    
+    %Numero 3
+        imgr = imrotate(imgv, 70, 'bilinear', 'crop');
+        fftr = abs(fftshift(fft2(imgr)));
+        figure;
+        imshow(log(1+fftr), []);
+        
+    %Numero 4
+        %En appliquant une rotation sur une image, la même rotation est
+        %appliquée sur sa transformée de Fourier.
+        
+%% Exercice 4
+    clear all;
+    close all;
+    clc;
+    %Numero 1
+        img = imread('images\maillot.png');
+        tfd = (fft2(img));
+        figure;
+        imshow(log(1+abs(fftshift(tfd))), []);
+        
+    %Numero 2
+        figure;
+        imshow(imread('images\schema.png'));
+    
+    %Numero 3
+        filtrebas = fspecial('gaussian', [551,777], 2);
+        imgfb = imfilter(img, filtrebas, 'same');
+        figure;
+        imshow(imgfb);
+        
+    %Numero 4
+        filtrehaut = fspecial('laplacian');
+        imgfh = imfilter(img, filtrehaut, 'same');
+        figure;
+        imshow(imgfh)
+        
+    %Numero 5
+        filtreideal = double(rgb2gray(imread('images\untitled3.png')))/255;
+        atfd = abs(tfd);
+        tfdf = fftshift(tfd).*filtreideal;
+        img5 = ifft2(ifftshift(tfdf));
+        figure;
+        imshow(img5, []);
+        
+    %Numero 6
+        filtreideal = double(rgb2gray(imread('images\untitled4.png')))/255;
+        atfd = abs(tfd);
+        tfdf = fftshift(tfd).*filtreideal;
+        img5 = ifft2(ifftshift(tfdf));
+        figure;
+        imshow(img5, []);
+        
+    
+    %Numero 7
+        %Le filtre de butterworth ajoute du flou dans l'image mais n'ajoute
+        %pas d'artéfacte contrairement au filtre idéal.
+        
+    %Numero 8
+        %Cela ressemble a un filtre passe-haut très faible, où les contours
+        %sont préservés et les couleurs tendent vers la moyenne.
+        
+    %Numero 9
+        %C'est un filtre passe-haut.
+        
+        
+%% Fonctions
+
+function[result] = Egalisation_Histogramme(img)
+        [h,count] = imhist(img);
+        hnorm = h/(size(img,1)*size(img,2));
+        
+        result = zeros(548,1000);
+        
+        for i=1:size(img,1)
+            for j=1:size(img,2)
+                sum = 0;
+                for k=1:img(i,j)
+                    sum = sum + hnorm(k);
+                end
+                result(i,j) = 255*sum;
+            end
+        end
+end
+
+function[result] = Convolution(img, masque)
+    m = uint64(size(masque,1)/2);
+    n = uint64(size(masque,2)/2);
+    
+    masque = rot90(masque, 2);
+    result = zeros(size(img,1),size(img,2));
+    
+    for i=m:(size(img,1)-m+1)
+        for j=n:(size(img,2)-n+1)
+            submatrix = img(i-m+1:i+m-1, j-n+1:j+n-1);
+            mat = double(submatrix).*masque;
+            s = sum(mat, 'all');
+            result(i,j) = s;
+        end
+    end
+end
+
+function[result, lap] = Rehaussement_Contour(img,k)
+        
+        gaussien = (1/16) * [1,2,1;
+                             2,4,2;
+                             1,2,1];
+                         
+        laplacien = [-1,-1,-1;
+                     -1,8,-1;
+                     -1,-1,-1];
+                 
+        lap = Convolution(img,laplacien);
+        
+        result = Convolution(img,gaussien) + k * lap;
+end
+
+function[result] = Binariser(img, k)
+    result = zeros(size(img,1),size(img,2));
+    for i=1:size(img,1)
+        for j=1:size(img,2)
+            if img(i,j) > k
+                result(i,j) = 0;
+            else
+                result(i,j) = 255;
+            end
+        end
+    end
+end
+
+function[result] = Compter_Monnaie(img)
+    img = imerode(img, strel('disk',80)); %80
+    [L,dix] = bwlabel(img);
+
+    img = imerode(img, strel('disk',20)); %100
+    [L,cinq] = bwlabel(img);
+
+    img = imerode(img, strel('disk',15)); %115
+    [L,vcinq] = bwlabel(img);
+
+    img = imerode(img, strel('disk',25)); %130
+    [L,deux] = bwlabel(img);
+
+    img = imerode(img, strel('disk',20)); %150
+    [L,cookie] = bwlabel(img);
+
+    dix = dix - cinq;
+    cinq = cinq - vcinq;
+    vcinq = vcinq - deux;
+    deux = deux - cookie;
+    result = [cinq, dix, vcinq, deux];
+end
+##### SOURCE END #####
+--></body></html>

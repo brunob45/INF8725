@@ -1,0 +1,548 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>TP</title><meta name="generator" content="MATLAB 9.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-18"><meta name="DC.source" content="TP.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Nettoyage du Workspace</a></li><li><a href="#2">Exercice 1</a></li><li><a href="#3">Exercice 2</a></li><li><a href="#4">Exercice 3</a></li><li><a href="#5">Exercice 4</a></li><li><a href="#6">Fonctions</a></li></ul></div><h2 id="1">Nettoyage du Workspace</h2><pre class="codeinput">    clear <span class="string">all</span>;
+    close <span class="string">all</span>;
+    clc;
+</pre><h2 id="2">Exercice 1</h2><pre class="codeinput">    clear <span class="string">all</span>;
+    close <span class="string">all</span>;
+    clc;
+
+    <span class="comment">%%Numero 1</span>
+       t = linspace(-4,4,1000);
+       s = sin(pi*t);
+       <span class="keyword">for</span> i = 1:1000
+           s(i) = s(i)/(pi*t(i));
+       <span class="keyword">end</span>
+
+       <span class="comment">% Afficher le r&eacute;sultat</span>
+       figure;
+       plot(t,s);
+       xlabel(<span class="string">'temps (s)'</span>);
+       title(<span class="string">'Signal sur le Temps'</span>);
+
+        <span class="comment">% Reponse : Fonction sinus cardinal</span>
+
+    <span class="comment">%%Numero 2</span>
+        t = linspace(-2,2,500);
+        s1 = sin(t);
+        s2 = sin(3*t)/3;
+        s3 = sin(5*t)/5;
+
+        <span class="comment">% Afficher le r&eacute;sultat</span>
+        figure;
+        plot(t, s1, <span class="string">'--'</span>);
+        hold <span class="string">on</span>;
+        plot(t, s2, <span class="string">'--'</span>);
+        plot(t, s3, <span class="string">'--'</span>);
+
+    <span class="comment">%%Numero 3</span>
+        s4 = s1+s2+s3;
+        plot(t, s4, <span class="string">'LineWidth'</span>, 2);
+        hold <span class="string">off</span>;
+
+    <span class="comment">%%Numero 4</span>
+        s50 = sumSine(50, t);
+        figure;
+        <span class="comment">%plot(t, s50);</span>
+
+        s500 = sumSine(500, t);
+        hold <span class="string">on</span>;
+        plot(t, s500);
+        hold <span class="string">off</span>;
+</pre><img vspace="5" hspace="5" src="TP_01.png" alt=""> <img vspace="5" hspace="5" src="TP_02.png" alt=""> <img vspace="5" hspace="5" src="TP_03.png" alt=""> <h2 id="3">Exercice 2</h2><pre class="codeinput">    clear <span class="string">all</span>;
+    close <span class="string">all</span>;
+    clc;
+
+    <span class="comment">%%Numero 1</span>
+        <span class="comment">%R&eacute;ponse : les fr&eacute;quences observ&eacute;es sont 82.5, 3 et 40 Hz. Ces</span>
+        <span class="comment">%r&eacute;sultats sont obtenus en divisant la pulsation par 2*pi.</span>
+    <span class="comment">%%Numero 2</span>
+        figure;
+        ex2num2(20,1);
+        ex2num2(75,2);
+        ex2num2(100,3);
+        ex2num2(160,4);
+        ex2num2(180,5);
+        ex2num2(330,6);
+
+    <span class="comment">%%Numero 3</span>
+        <span class="comment">%R&eacute;ponse : Plus la fr&eacute;quence d'&eacute;chantillonnage est &eacute;lev&eacute;e, plus les</span>
+        <span class="comment">%hautes fr&eacute;quences sont visibles. Quand la fr&eacute;quence diminue, plus on</span>
+        <span class="comment">%perd dans la pr&eacute;cision du signal.</span>
+
+    <span class="comment">%%Numero 4</span>
+        <span class="comment">%R&eacute;ponse : les &eacute;chantillonnages &agrave; 180 et 330Hz, car ces fr&eacute;quences</span>
+        <span class="comment">%d'&eacute;chantillonnage sont au moins 2x plus &eacute;lev&eacute;e que la plus haute</span>
+        <span class="comment">%fr&eacute;quence du signal (82.5Hz).</span>
+</pre><img vspace="5" hspace="5" src="TP_04.png" alt=""> <h2 id="4">Exercice 3</h2><pre class="codeinput">    clear <span class="string">all</span>;
+    close <span class="string">all</span>;
+    clc;
+
+    <span class="comment">%%Numero 1</span>
+        t = linspace(0,1,250);
+        Y1 = 7*sin(2*pi*10*t);
+        Y2 = 4*sin(2*pi*25*t+(pi/3));
+        Y3 = 3*cos(2*pi*50*t);
+
+        figure;
+        plot(t, Y1);
+        hold <span class="string">on</span>;
+        plot(t, Y2);
+        plot(t, Y3);
+        hold <span class="string">off</span>;
+
+        xlabel(<span class="string">'t'</span>);
+        ylabel(<span class="string">'Y'</span>);
+        title(<span class="string">"Exercice 3.1"</span>);
+        legend(<span class="string">"Y1"</span>, <span class="string">"Y2"</span>, <span class="string">"Y3"</span>);
+
+    <span class="comment">%%Numero 2</span>
+        <span class="comment">%Y1: f=10Hz</span>
+        <span class="comment">%Y2: f=25Hz</span>
+        <span class="comment">%Y3: f=50Hz</span>
+
+    <span class="comment">%%Numero 3</span>
+        Z = Y1 + Y2 + Y3;
+        figure;
+        plot(t, Z, <span class="string">'LineWidth'</span>, 2);
+        xlabel(<span class="string">'t'</span>);
+        ylabel(<span class="string">'Y'</span>);
+        title(<span class="string">"Exercice 3.3"</span>);
+        <span class="comment">%R&eacute;ponse : PGCD(10,25,50) = 5Hz, ce qui peut &ecirc;tre aussi observ&eacute;</span>
+        <span class="comment">%dans le graphique</span>
+
+    <span class="comment">%%Numero 4</span>
+        figure;
+        subplot(3,1,1);
+        plot(t, fft(Y1));
+        subplot(3,1,2);
+        plot(t, fft(Y2));
+        subplot(3,1,3);
+        plot(t, fft(Y3));
+        <span class="comment">%R&eacute;ponse : La TFD&nbsp;des signaux comporte deux "pics" chaque.</span>
+
+    <span class="comment">%%Numero 5</span>
+        figure;
+        plot(t, fft(Z));
+        <span class="comment">%R&eacute;ponse : La TFD du signal composite est l'addition des trois TFD</span>
+        <span class="comment">%pr&eacute;c&eacute;dentes.</span>
+</pre><pre class="codeoutput">Warning: Imaginary parts of complex X and/or Y arguments ignored 
+Warning: Imaginary parts of complex X and/or Y arguments ignored 
+Warning: Imaginary parts of complex X and/or Y arguments ignored 
+Warning: Imaginary parts of complex X and/or Y arguments ignored 
+</pre><img vspace="5" hspace="5" src="TP_05.png" alt=""> <img vspace="5" hspace="5" src="TP_06.png" alt=""> <img vspace="5" hspace="5" src="TP_07.png" alt=""> <img vspace="5" hspace="5" src="TP_08.png" alt=""> <h2 id="5">Exercice 4</h2><pre class="codeinput">    clear <span class="string">all</span>;
+    close <span class="string">all</span>;
+    clc;
+
+    <span class="comment">%%Numero 1</span>
+        [Data,Fe] = audioread(<span class="string">'X:\Documents\INF8725\tp1\audio.wav'</span>);
+        player = audioplayer(Data, Fe);
+        player.play();
+
+    <span class="comment">%%Numero 2</span>
+        figure;
+        ex4num3(Data, Fe);
+
+    <span class="comment">%%Numero 3</span>
+        <span class="comment">%sol (12.5Hz);</span>
+
+    <span class="comment">%%Numero 4</span>
+        Fn = Fe/2;
+        cutoff = 1000/Fn;
+        filtre = fir1(128, cutoff, <span class="string">'low'</span>);
+        filteredData = filter(filtre, 1, Data);
+
+        hold <span class="string">on</span>;
+        ex4num3(filteredData, Fe);
+        hold <span class="string">off</span>;
+
+    <span class="comment">%%Numero 5</span>
+        w1 = chebwin(129, 30);
+        f1 = fir1(128, 250/Fn, <span class="string">'high'</span>,w1);
+        w2 = hamming(129);
+        f2 = fir1(128, 250/Fn, <span class="string">'high'</span>, w2);
+        w3 = blackman(129);
+        f3 = fir1(128, 250/Fn, <span class="string">'high'</span>, w3);
+
+    <span class="comment">%%Numero 6</span>
+
+        HD1 = dfilt.dffir(f1);
+        HD2 = dfilt.dffir(f2);
+        HD3 = dfilt.dffir(f3);
+
+        freqz([HD1,HD2,HD3]);
+
+    <span class="comment">%%Numero 7</span>
+
+        filteredData2 = filter(f1,1,filteredData);
+        filteredData3 = filter(f2,1,filteredData);
+        filteredData4 = filter(f3,1,filteredData);
+
+        player = audioplayer(filteredData2, Fe);
+        player.play();
+        player = audioplayer(filteredData3, Fe);
+        player.play();
+        player = audioplayer(filteredData4, Fe);
+        player.play();
+
+        <span class="comment">% Le signal filtr&eacute; avec le filtre f1 est celui avec le moins de</span>
+        <span class="comment">% perturbation dans les basses fr&eacute;quences. Cependant le signal de</span>
+        <span class="comment">% la musique a aussi &eacute;t&eacute; endommag&eacute;.</span>
+        <span class="comment">% Inversement le signal filtr&eacute; avec le filtre f3 a les pertubations</span>
+        <span class="comment">% de basses fr&eacute;quences les plus fortes, cependant le signal de la</span>
+        <span class="comment">% musique est intact.</span>
+        <span class="comment">% Le signal filtr&eacute; avec le filtre f2 est entre les deux autres en</span>
+        <span class="comment">% termes de qualit&eacute; de la musique et de force des pertubations.</span>
+
+    <span class="comment">%%Numero 8</span>
+        figure;
+
+        ex4num3(filteredData2, Fe);
+        hold <span class="string">on</span>;
+        ex4num3(filteredData3, Fe);
+        ex4num3(filteredData4, Fe);
+        hold <span class="string">off</span>;
+
+        <span class="comment">% Les spectres des signals correspond a nos observations. En effet,</span>
+        <span class="comment">% il faut zoomer pour voir les signaux 1 et 2. De plus, en</span>
+        <span class="comment">% observant attentivement on peut voir des compressions dans le</span>
+        <span class="comment">% signal filtr&eacute; avec f1 qui diminuent la qualit&eacute; du son.</span>
+</pre><img vspace="5" hspace="5" src="TP_09.png" alt=""> <img vspace="5" hspace="5" src="TP_10.png" alt=""> <img vspace="5" hspace="5" src="TP_11.png" alt=""> <h2 id="6">Fonctions</h2><pre class="codeinput"><span class="keyword">function</span>[] = ex2num2(F, i)
+    t = linspace(0,1,F);
+    Y = 2*sin(165*pi*t) + 13*cos(6*pi*t) - 3*cos(80*pi*t);
+    subplot(2,3,i);
+    plot(t, Y);
+    xlabel(<span class="string">'temps (s)'</span>);
+    title(<span class="string">"&Eacute;chantillonnage &agrave; "</span> + F + <span class="string">"Hz"</span>);
+<span class="keyword">end</span>
+
+<span class="keyword">function</span>[r] = sumSine(n, t)
+    r = 1/2;
+    <span class="keyword">for</span> i = 1:n
+        e = sin(((2*i)+1)*t);
+        e = e / ((2*i)+1);
+        r = r + 2*e/pi;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span>[] = ex4num3(x, y)
+    L = size(x, 1)/y*1000;
+    Y = fft(x);
+    P2 = abs(Y/(L));
+    P1 = P2(1:L/2+1);
+    P1(2:end-1) = 2*P1(2:end-1);
+    f = y*(0:(L/2))/L;
+    plot(f, P1);
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Nettoyage du Workspace
+    clear all;
+    close all;
+    clc;
+
+%% Exercice 1
+    clear all;
+    close all;
+    clc;
+    
+    %%Numero 1
+       t = linspace(-4,4,1000);
+       s = sin(pi*t);
+       for i = 1:1000
+           s(i) = s(i)/(pi*t(i));
+       end
+
+       % Afficher le résultat
+       figure;
+       plot(t,s);
+       xlabel('temps (s)');
+       title('Signal sur le Temps');
+
+        % Reponse : Fonction sinus cardinal
+
+    %%Numero 2
+        t = linspace(-2,2,500);
+        s1 = sin(t);
+        s2 = sin(3*t)/3;
+        s3 = sin(5*t)/5;
+
+        % Afficher le résultat
+        figure;
+        plot(t, s1, 'REPLACE_WITH_DASH_DASH');
+        hold on;
+        plot(t, s2, 'REPLACE_WITH_DASH_DASH');
+        plot(t, s3, 'REPLACE_WITH_DASH_DASH');
+
+    %%Numero 3
+        s4 = s1+s2+s3;
+        plot(t, s4, 'LineWidth', 2);
+        hold off;
+
+    %%Numero 4
+        s50 = sumSine(50, t);
+        figure;
+        %plot(t, s50);
+
+        s500 = sumSine(500, t);
+        hold on;
+        plot(t, s500);
+        hold off;
+    
+%% Exercice 2
+    clear all;
+    close all;
+    clc;
+    
+    %%Numero 1
+        %Réponse : les fréquences observées sont 82.5, 3 et 40 Hz. Ces
+        %résultats sont obtenus en divisant la pulsation par 2*pi.
+    %%Numero 2
+        figure;
+        ex2num2(20,1);
+        ex2num2(75,2);
+        ex2num2(100,3);
+        ex2num2(160,4);
+        ex2num2(180,5);
+        ex2num2(330,6);
+
+    %%Numero 3
+        %Réponse : Plus la fréquence d'échantillonnage est élevée, plus les
+        %hautes fréquences sont visibles. Quand la fréquence diminue, plus on
+        %perd dans la précision du signal.
+
+    %%Numero 4
+        %Réponse : les échantillonnages à 180 et 330Hz, car ces fréquences
+        %d'échantillonnage sont au moins 2x plus élevée que la plus haute
+        %fréquence du signal (82.5Hz).
+    
+%% Exercice 3
+    clear all;
+    close all;
+    clc;
+    
+    %%Numero 1
+        t = linspace(0,1,250);
+        Y1 = 7*sin(2*pi*10*t);
+        Y2 = 4*sin(2*pi*25*t+(pi/3));
+        Y3 = 3*cos(2*pi*50*t);
+
+        figure;
+        plot(t, Y1);
+        hold on;
+        plot(t, Y2);
+        plot(t, Y3);
+        hold off;
+
+        xlabel('t');
+        ylabel('Y');
+        title("Exercice 3.1");
+        legend("Y1", "Y2", "Y3");
+    
+    %%Numero 2
+        %Y1: f=10Hz
+        %Y2: f=25Hz
+        %Y3: f=50Hz
+    
+    %%Numero 3
+        Z = Y1 + Y2 + Y3;
+        figure;
+        plot(t, Z, 'LineWidth', 2);
+        xlabel('t');
+        ylabel('Y');
+        title("Exercice 3.3");
+        %Réponse : PGCD(10,25,50) = 5Hz, ce qui peut être aussi observé
+        %dans le graphique
+    
+    %%Numero 4
+        figure;
+        subplot(3,1,1);
+        plot(t, fft(Y1));
+        subplot(3,1,2);
+        plot(t, fft(Y2));
+        subplot(3,1,3);
+        plot(t, fft(Y3));
+        %Réponse : La TFD des signaux comporte deux "pics" chaque.
+        
+    %%Numero 5
+        figure;
+        plot(t, fft(Z));
+        %Réponse : La TFD du signal composite est l'addition des trois TFD
+        %précédentes.
+
+
+%% Exercice 4
+    clear all;
+    close all;
+    clc;
+    
+    %%Numero 1
+        [Data,Fe] = audioread('X:\Documents\INF8725\tp1\audio.wav');
+        player = audioplayer(Data, Fe);
+        player.play();
+    
+    %%Numero 2
+        figure;
+        ex4num3(Data, Fe);
+
+    %%Numero 3
+        %sol (12.5Hz);
+        
+    %%Numero 4
+        Fn = Fe/2;
+        cutoff = 1000/Fn;
+        filtre = fir1(128, cutoff, 'low');
+        filteredData = filter(filtre, 1, Data);
+        
+        hold on;
+        ex4num3(filteredData, Fe);
+        hold off;
+        
+    %%Numero 5
+        w1 = chebwin(129, 30);
+        f1 = fir1(128, 250/Fn, 'high',w1);
+        w2 = hamming(129);
+        f2 = fir1(128, 250/Fn, 'high', w2);
+        w3 = blackman(129);
+        f3 = fir1(128, 250/Fn, 'high', w3);
+        
+    %%Numero 6
+    
+        HD1 = dfilt.dffir(f1);
+        HD2 = dfilt.dffir(f2);
+        HD3 = dfilt.dffir(f3);
+        
+        freqz([HD1,HD2,HD3]);
+    
+    %%Numero 7
+        
+        filteredData2 = filter(f1,1,filteredData);
+        filteredData3 = filter(f2,1,filteredData);
+        filteredData4 = filter(f3,1,filteredData);
+        
+        player = audioplayer(filteredData2, Fe);
+        player.play();
+        player = audioplayer(filteredData3, Fe);
+        player.play();        
+        player = audioplayer(filteredData4, Fe);
+        player.play();
+        
+        % Le signal filtré avec le filtre f1 est celui avec le moins de
+        % perturbation dans les basses fréquences. Cependant le signal de 
+        % la musique a aussi été endommagé.
+        % Inversement le signal filtré avec le filtre f3 a les pertubations
+        % de basses fréquences les plus fortes, cependant le signal de la
+        % musique est intact.
+        % Le signal filtré avec le filtre f2 est entre les deux autres en
+        % termes de qualité de la musique et de force des pertubations.
+
+    %%Numero 8
+        figure;
+
+        ex4num3(filteredData2, Fe);
+        hold on;
+        ex4num3(filteredData3, Fe);
+        ex4num3(filteredData4, Fe);
+        hold off;
+
+        % Les spectres des signals correspond a nos observations. En effet,
+        % il faut zoomer pour voir les signaux 1 et 2. De plus, en
+        % observant attentivement on peut voir des compressions dans le
+        % signal filtré avec f1 qui diminuent la qualité du son.
+        
+%% Fonctions
+function[] = ex2num2(F, i)
+    t = linspace(0,1,F);
+    Y = 2*sin(165*pi*t) + 13*cos(6*pi*t) - 3*cos(80*pi*t);
+    subplot(2,3,i);
+    plot(t, Y);
+    xlabel('temps (s)');
+    title("Échantillonnage à " + F + "Hz");
+end
+
+function[r] = sumSine(n, t)
+    r = 1/2;
+    for i = 1:n
+        e = sin(((2*i)+1)*t);
+        e = e / ((2*i)+1);
+        r = r + 2*e/pi;
+    end
+end
+
+function[] = ex4num3(x, y)
+    L = size(x, 1)/y*1000;
+    Y = fft(x);
+    P2 = abs(Y/(L));
+    P1 = P2(1:L/2+1);
+    P1(2:end-1) = 2*P1(2:end-1);
+    f = y*(0:(L/2))/L;
+    plot(f, P1);
+end
+##### SOURCE END #####
+--></body></html>
