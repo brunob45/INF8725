@@ -61,25 +61,81 @@
     
     %%Numero 1
         img = rgb2gray(imread('images\pieces.jpg'));
+    
+    %%Numero 2
         imshow(uint8(img));
         img = Binariser(img, 250);
         figure;
         imshow(uint8(img));
         
-    %%Numero 2
+    %%Numero 3
         img = imclose(img, strel('disk',10));
         figure;
         imshow(uint8(img));
         
-    %%Numero 3
+    %%Numero 4
         monnaie = Compter_Monnaie(img);
         % la valeur de retour est un array contenant le nombre pour chaque
         % piece de monnaie [5, 10, 25, 2.00]
         
 %% Exercice 3
     %%Numero 1
+        imgv = imread('images\Barres_Verticales.png');
+        imgh = imread('images\Barres_Horizontales.png');
+        imgo = imread('images\Barres_Obliques.png');
         
-%% Fontions
+    %%Numero 2
+        fftv = abs(fftshift(fft2(imgv)));
+        ffth = abs(fftshift(fft2(imgh)));
+        ffto = abs(fftshift(fft2(imgo)));
+        imshow(log(1+fftv), []);
+        figure;
+        imshow(log(1+ffth), []);
+        figure;
+        imshow(log(1+ffto), []);
+    
+    %Numero 3
+        imgr = imrotate(imgv, 70, 'bilinear', 'crop');
+        fftr = abs(fftshift(fft2(imgr)));
+        figure;
+        imshow(log(1+fftr), []);
+        
+    %Numero 4
+        %En appliquant une rotation sur une image, la même rotation est
+        %appliquée sur sa transformée de Fourier.
+        
+%% Exercice 4
+    %Numero 1
+        img = imread('images\maillot.png');
+        tfd = fftshift(fft2(img));
+        figure;
+        imshow(log(1+abs(tfd)), []);
+        
+    %Numero 2
+        figure;
+        imshow(imread('images\schema.png'));
+    
+    %Numero 3
+        filtrebas = fspecial('gaussian', [551,777], 2);
+        imgfb = imfilter(img, filtrebas, 'same');
+        figure;
+        imshow(imgfb);
+        
+    %Numero 4
+        filtrehaut = (double(imread('images\filtre_maillot2.png')))/255;
+        imgfh = imfilter(img, filtrehaut, 'same');
+        figure;
+        imshow(imgfh)
+        
+    %Numero 5
+        tfdf = imfilter(tfd, filtrehaut, 'same');
+        img5 = ifft2(tfdf);
+        figure;
+        imshow(img5);
+        
+        
+        
+%% Fonctions
 
 function[result] = Egalisation_Histogramme(img)
         [h,count] = imhist(img);
