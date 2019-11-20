@@ -24,7 +24,7 @@ def DoG(img, s, nb_octave):
     for octave in range(nb_octave):
         for scale in range(s):
             imgcpy = applyGaussian(img)
-            results.append(abs(img - imgcpy))  #original line to get difference of Gaussian
+            results.append(img - imgcpy)   #original line to get difference of Gaussian
             #results.append(imgcpy)              #test line to get filtered images
             img = imgcpy
         img = resize(img)
