@@ -30,14 +30,14 @@ def isMaxima(down, actual, up, y, x):
     a = [actual[x-1][y-1], actual[x-1][y-0], actual[x-1][y+1],
          actual[x-0][y-1],                   actual[x-0][y+1],
          actual[x+1][y-1], actual[x+1][y-0], actual[x+1][y+1]]
-    b = [0]#[down[x][y]]
-    c = [0]#[up[x][y]]
-    # b = [down[x-1][y-1], down[x-1][y-0], down[x-1][y+1],
-    #      down[x-0][y-1], down[x-0][y-0], down[x-0][y+1],
-    #      down[x+1][y-1], down[x+1][y-0], down[x+1][y+1]]
-    # c = [up[x-1][y-1], up[x-1][y-0], up[x-1][y+1],
-    #      up[x-0][y-1], up[x-0][y-0], up[x-0][y+1],
-    #      up[x+1][y-1], up[x+1][y-0], up[x+1][y+1]]
+    # b = [0]#[down[x][y]]
+    # c = [0]#[up[x][y]]
+    b = [down[x-1][y-1], down[x-1][y-0], down[x-1][y+1],
+         down[x-0][y-1], down[x-0][y-0], down[x-0][y+1],
+         down[x+1][y-1], down[x+1][y-0], down[x+1][y+1]]
+    c = [up[x-1][y-1], up[x-1][y-0], up[x-1][y+1],
+         up[x-0][y-1], up[x-0][y-0], up[x-0][y+1],
+         up[x+1][y-1], up[x+1][y-0], up[x+1][y+1]]
     return max(a) <= target and max(b) <= target and max(c) <= target
 
 
@@ -46,14 +46,14 @@ def isMinima(down, actual, up, y, x):
     a = [actual[x-1][y-1], actual[x-1][y-0], actual[x-1][y+1],
          actual[x-0][y-1],                   actual[x-0][y+1],
          actual[x+1][y-1], actual[x+1][y-0], actual[x+1][y+1]]
-    b = [0]#[down[x][y]]
-    c = [0]#[up[x][y]]
-    # b = [down[x-1][y-1], down[x-1][y-0], down[x-1][y+1],
-    #      down[x-0][y-1], down[x-0][y-0], down[x-0][y+1],
-    #      down[x+1][y-1], down[x+1][y-0], down[x+1][y+1]]
-    # c = [up[x-1][y-1], up[x-1][y-0], up[x-1][y+1],
-    #      up[x-0][y-1], up[x-0][y-0], up[x-0][y+1],
-    #      up[x+1][y-1], up[x+1][y-0], up[x+1][y+1]]
+    # b = [0]#[down[x][y]]
+    # c = [0]#[up[x][y]]
+    b = [down[x-1][y-1], down[x-1][y-0], down[x-1][y+1],
+         down[x-0][y-1], down[x-0][y-0], down[x-0][y+1],
+         down[x+1][y-1], down[x+1][y-0], down[x+1][y+1]]
+    c = [up[x-1][y-1], up[x-1][y-0], up[x-1][y+1],
+         up[x-0][y-1], up[x-0][y-0], up[x-0][y+1],
+         up[x+1][y-1], up[x+1][y-0], up[x+1][y+1]]
     return min(a) >= target and min(b) >= target and min(c) >= target
 
 def contrastVerification(dog, candidates, limit): # limit = 0.03
@@ -85,41 +85,42 @@ def eliminatingEdges(dog, candidates, limit): # limit = 10
 
 
 if __name__ == '__main__':
-
     img = openImage('Lenna.jpg')
-    
-    img = img / np.max(img)
 
-    results = DoG(img, 4, 3)
     octave = 2
-    scale = 1
+    scale = 4
 
-    (maxima, minima) = localExtremaDetection(results[octave*4+scale-1], results[octave*4+scale], results[octave*4+scale+1])
+    results = DoG(img, scale, octave)
 
-    plt.plot([2,3])
-    plt.subplot(231)
-    show(results[octave*4+scale-1])
-    plt.subplot(232)
-    show(results[octave*4+scale])
-    plt.subplot(233)
-    show(results[octave*4+scale+1])
-    plt.subplot(235)
-    show(results[octave*4+scale])
+    plt.plot([octave,scale])
 
-    x, y = [], []
-    for i,j in minima:
-        x.append(i)
-        y.append(j)
+    for o in range(0,octave):
+        for s in range(1,scale-1):
+            down = results[s + o * scale]
+            img = results[s + o * scale]
+            up = results[s + o * scale]
+            (maxima, minima) = localExtremaDetection(down, img, up)
+            candidates = maxima
+            candidates.append(minima)
+            survivants = contrastVerification(img, candidates, limit=0.03)
 
-    plt.autoscale(False)
-    plt.plot(x,y, 'bo', markersize=2)
+            plt.subplot(octave, scale, 1 + o*scale +s)
+            show(img)
 
-    x, y = [], []
-    for i,j in maxima:
-        x.append(i)
-        y.append(j)
+            x, y = [], []
+            for i,j in survivants:
+                x.append(i)
+                y.append(j)
 
-    plt.autoscale(False)
-    plt.plot(x,y, 'ro', markersize=2)
+            plt.autoscale(False)
+            plt.plot(x,y, 'bo', markersize=2)
+
+            # x, y = [], []
+            # for i,j in maxima:
+            #     x.append(i)
+            #     y.append(j)
+
+            # plt.autoscale(False)
+            # plt.plot(x,y, 'ro', markersize=2)
 
     plt.show()
