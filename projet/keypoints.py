@@ -25,41 +25,41 @@ def localExtremaDetection(down, actual, up):
                 minima.append((x,y))
     return (maxima, minima)
 
-def isMaxima(down, actual, up, y, x):
-    target = actual[x][y]
-    a = [actual[x-1][y-1], actual[x-1][y-0], actual[x-1][y+1],
-         actual[x-0][y-1],                   actual[x-0][y+1],
-         actual[x+1][y-1], actual[x+1][y-0], actual[x+1][y+1]]
-    # b = [0]#[down[x][y]]
-    # c = [0]#[up[x][y]]
-    b = [down[x-1][y-1], down[x-1][y-0], down[x-1][y+1],
-         down[x-0][y-1], down[x-0][y-0], down[x-0][y+1],
-         down[x+1][y-1], down[x+1][y-0], down[x+1][y+1]]
-    c = [up[x-1][y-1], up[x-1][y-0], up[x-1][y+1],
-         up[x-0][y-1], up[x-0][y-0], up[x-0][y+1],
-         up[x+1][y-1], up[x+1][y-0], up[x+1][y+1]]
+def isMaxima(down, actual, up, x, y):
+    target = actual[y][x]
+    a = [actual[y-1][x-1], actual[y-1][x-0], actual[y-1][x+1],
+         actual[y-0][x-1],                   actual[y-0][x+1],
+         actual[y+1][x-1], actual[y+1][x-0], actual[y+1][x+1]]
+    # b = [0]#[down[y][x]]
+    # c = [0]#[up[y][x]]
+    b = [down[y-1][x-1], down[y-1][x-0], down[y-1][x+1],
+         down[y-0][x-1], down[y-0][x-0], down[y-0][x+1],
+         down[y+1][x-1], down[y+1][x-0], down[y+1][x+1]]
+    c = [up[y-1][x-1], up[y-1][x-0], up[y-1][x+1],
+         up[y-0][x-1], up[y-0][x-0], up[y-0][x+1],
+         up[y+1][x-1], up[y+1][x-0], up[y+1][x+1]]
     return max(a) <= target and max(b) <= target and max(c) <= target
 
 
-def isMinima(down, actual, up, y, x):
-    target = actual[x][y]
-    a = [actual[x-1][y-1], actual[x-1][y-0], actual[x-1][y+1],
-         actual[x-0][y-1],                   actual[x-0][y+1],
-         actual[x+1][y-1], actual[x+1][y-0], actual[x+1][y+1]]
-    # b = [0]#[down[x][y]]
-    # c = [0]#[up[x][y]]
-    b = [down[x-1][y-1], down[x-1][y-0], down[x-1][y+1],
-         down[x-0][y-1], down[x-0][y-0], down[x-0][y+1],
-         down[x+1][y-1], down[x+1][y-0], down[x+1][y+1]]
-    c = [up[x-1][y-1], up[x-1][y-0], up[x-1][y+1],
-         up[x-0][y-1], up[x-0][y-0], up[x-0][y+1],
-         up[x+1][y-1], up[x+1][y-0], up[x+1][y+1]]
+def isMinima(down, actual, up, x, y):
+    target = actual[y][x]
+    a = [actual[y-1][x-1], actual[y-1][x-0], actual[y-1][x+1],
+         actual[y-0][x-1],                   actual[y-0][x+1],
+         actual[y+1][x-1], actual[y+1][x-0], actual[y+1][x+1]]
+    # b = [0]#[down[y][x]]
+    # c = [0]#[up[y][x]]
+    b = [down[y-1][x-1], down[y-1][x-0], down[y-1][x+1],
+         down[y-0][x-1], down[y-0][x-0], down[y-0][x+1],
+         down[y+1][x-1], down[y+1][x-0], down[y+1][x+1]]
+    c = [up[y-1][x-1], up[y-1][x-0], up[y-1][x+1],
+         up[y-0][x-1], up[y-0][x-0], up[y-0][x+1],
+         up[y+1][x-1], up[y+1][x-0], up[y+1][x+1]]
     return min(a) >= target and min(b) >= target and min(c) >= target
 
 def contrastVerification(dog, candidates, limit): # limit = 0.03
     keypoints = []
     for candidate in candidates:
-        if abs(dog[candidate[0]][candidate[1]]) < limit:
+        if abs(dog[candidate[1]][candidate[0]]) < limit:
             keypoints.append(candidate)
 
     return keypoints
@@ -67,9 +67,9 @@ def contrastVerification(dog, candidates, limit): # limit = 0.03
 def eliminatingEdges(dog, candidates, limit): # limit = 10
     keypoints = []
     for candidate in candidates:
-        dxx = dog[candidate[0]+1][candidate[1]]-2*dog[candidate[0]][candidate[1]]+dog[candidate[0]-1][candidate[1]]
-        dxy = ((dog[candidate[0]+1][candidate[1]+1]-dog[candidate[0]-1][candidate[1]+1])-(dog[candidate[0]+1][candidate[1]-1]-dog[candidate[0]-1][candidate[1]-1]))/4
-        dyy = dog[candidate[0]][candidate[1]+1]-2*dog[candidate[0]][candidate[1]]+dog[candidate[0]][candidate[1]-1]
+        dxx = dog[candidate[1]+1][candidate[0]]-2*dog[candidate[1]][candidate[0]]+dog[candidate[1]-1][candidate[0]]
+        dxy = ((dog[candidate[1]+1][candidate[0]+1]-dog[candidate[1]-1][candidate[0]+1])-(dog[candidate[1]+1][candidate[0]-1]-dog[candidate[1]-1][candidate[0]-1]))/4
+        dyy = dog[candidate[1]][candidate[0]+1]-2*dog[candidate[1]][candidate[0]]+dog[candidate[1]][candidate[0]-1]
 
         tr = dxx + dyy
         det = dxx*dyy - pow(dxy,2)
@@ -83,11 +83,20 @@ def eliminatingEdges(dog, candidates, limit): # limit = 10
 
     return keypoints
 
+def getKeyPoints(dog, s, o):
+    img = dog[s + o * scale]
+    # (maxima, minima) = localExtremaDetection(dog[s-1 + o * scale], img, dog[s+1 + o * scale])
+    (maxima, minima) = localExtremaDetection(dog[s + o * scale], img, dog[s + o * scale])
+
+    survivants = maxima + minima
+    survivants = contrastVerification(img, survivants, limit=0.03)
+    survivants = eliminatingEdges(img, survivants, limit=10)
+    return survivants
 
 if __name__ == '__main__':
-    img = openImage('Lenna.jpg')
+    img = openImage('droite.jpg')
 
-    octave = 2
+    octave = 3
     scale = 4
 
     results = DoG(img, scale, octave)
@@ -96,13 +105,9 @@ if __name__ == '__main__':
 
     for o in range(0,octave):
         for s in range(1,scale-1):
-            down = results[s + o * scale]
+            print(o, s)
             img = results[s + o * scale]
-            up = results[s + o * scale]
-            (maxima, minima) = localExtremaDetection(down, img, up)
-            candidates = maxima
-            candidates.append(minima)
-            survivants = contrastVerification(img, candidates, limit=0.03)
+            survivants = getKeyPoints(results, s, o)
 
             plt.subplot(octave, scale, 1 + o*scale +s)
             show(img)
@@ -115,12 +120,5 @@ if __name__ == '__main__':
             plt.autoscale(False)
             plt.plot(x,y, 'bo', markersize=2)
 
-            # x, y = [], []
-            # for i,j in maxima:
-            #     x.append(i)
-            #     y.append(j)
-
-            # plt.autoscale(False)
-            # plt.plot(x,y, 'ro', markersize=2)
 
     plt.show()
