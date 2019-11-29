@@ -56,10 +56,10 @@ def isMinima(down, actual, up, y, x):
     #      up[x+1][y-1], up[x+1][y-0], up[x+1][y+1]]
     return min(a) >= target and min(b) >= target and min(c) >= target
 
-def contrastVerification(candidates, limit): # limit = 0.03
+def contrastVerification(dog, candidates, limit): # limit = 0.03
     keypoints = []
     for candidate in candidates:
-        if abs(candidate) < limit:
+        if abs(dog[candidate[0]][candidate[1]]) < limit:
             keypoints.append(candidate)
 
     return keypoints
