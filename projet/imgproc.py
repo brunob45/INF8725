@@ -2,9 +2,11 @@
 
 import matplotlib.pyplot as plt
 from PIL import Image
+import numpy as np
 
 def openImage(filename):
-    return Image.open(filename).convert('L')
+    img = Image.open(filename).convert('L')
+    return img / np.max(img)
 
 def show(img):
     plt.imshow(img, cmap='gray')#, vmin=0, vmax=255)

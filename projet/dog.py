@@ -7,23 +7,14 @@ from scipy.ndimage import gaussian_filter
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
-
-
-def applyGaussian(img):
-    # return gaussian_filter(img, sigma=0.7950)
-
-    filtre = np.array([[1/16, 1/8, 1/16],
-                       [1/8,  1/4, 1/8 ],
-                       [1/16, 1/8, 1/16]])
-    return signal.convolve2d(img, filtre, mode='same')
-
+from gaussian import applyGaussian
 
 def DoG(img, s, nb_octave):
     results = []
     imgcpy = img.copy()
-    for octave in range(nb_octave):
-        for scale in range(s):
-            imgcpy = applyGaussian(img)
+    for octave in range(0,nb_octave):
+        for scale in range(0,s):
+            imgcpy = applyGaussian(img, s)
             results.append(img - imgcpy)   #original line to get difference of Gaussian
             #results.append(imgcpy)              #test line to get filtered images
             img = imgcpy
@@ -32,33 +23,19 @@ def DoG(img, s, nb_octave):
 
 
 if __name__ == '__main__':
-    #img = openImage('droite.jpg')
     img = openImage('Lenna.jpg')
-    
-    img = img / np.max(img)
 
-    #results = DoG(img, 3, 2)
-    results = DoG(img, 6, 1)
-    plt.plot([2,3])
-    plt.subplot(231)
-    show(results[0])
-    plt.subplot(232)
-    show(results[1])
-    plt.subplot(233)
-    show(results[2])
-    plt.subplot(234)
-    show(results[3])
-    plt.subplot(235)
-    show(results[4])
-    #plt.subplot(236)
-    #show(results[5])
+    scale = 3
+    octave = 2
+
+    results = DoG(img, scale, octave)
+
+    plt.plot([octave,scale])
+
+    for j in range(0,octave):
+        for i in range(0,scale):
+            img = results[i + j * scale]
+            plt.subplot(octave, scale, 1 + j*scale +i)
+            show(img)
+
     plt.show()
-
-    #plt.plot([1,3])
-    #plt.subplot(131)
-    #show(results[0])
-    #plt.subplot(132)
-    #show(results[1])
-    #plt.subplot(133)
-    #show(results[2])
-    #plt.show()
