@@ -56,20 +56,20 @@ def isMinima(down, actual, up, y, x):
          up[x+1][y-1], up[x+1][y-0], up[x+1][y+1]]
     return min(a) >= target and min(b) >= target and min(c) >= target
 
-def contrastVerification(dog, candidates, limit): # limit = 0.03
+def contrastVerification(img, candidates, limit, octave): # limit = 0.03
     keypoints = []
     for candidate in candidates:
-        if abs(dog[candidate[0]][candidate[1]]) < limit:
+        if abs(img[candidate[0]][candidate[1]]) < limit:
             keypoints.append(candidate)
 
     return keypoints
 
-def eliminatingEdges(dog, candidates, limit): # limit = 10
+def eliminatingEdges(img, candidates, limit, octave): # limit = 10
     keypoints = []
     for candidate in candidates:
-        dxx = dog[candidate[0]+1][candidate[1]]-2*dog[candidate[0]][candidate[1]]+dog[candidate[0]-1][candidate[1]]
-        dxy = ((dog[candidate[0]+1][candidate[1]+1]-dog[candidate[0]-1][candidate[1]+1])-(dog[candidate[0]+1][candidate[1]-1]-dog[candidate[0]-1][candidate[1]-1]))/4
-        dyy = dog[candidate[0]][candidate[1]+1]-2*dog[candidate[0]][candidate[1]]+dog[candidate[0]][candidate[1]-1]
+        dxx = img[candidate[0]+1][candidate[1]]-2*img[candidate[0]][candidate[1]]+img[candidate[0]-1][candidate[1]]
+        dxy = ((img[candidate[0]+1][candidate[1]+1]-img[candidate[0]-1][candidate[1]+1])-(img[candidate[0]+1][candidate[1]-1]-img[candidate[0]-1][candidate[1]-1]))/4
+        dyy = img[candidate[0]][candidate[1]+1]-2*img[candidate[0]][candidate[1]]+img[candidate[0]][candidate[1]-1]
 
         tr = dxx + dyy
         det = dxx*dyy - pow(dxy,2)
@@ -82,6 +82,9 @@ def eliminatingEdges(dog, candidates, limit): # limit = 10
                 keypoints.append(candidate)
 
     return keypoints
+
+def getPoint(img,x,y,octave):
+    return img[x/pow(2,octave)][y/pow(2,octave)]
 
 
 if __name__ == '__main__':
