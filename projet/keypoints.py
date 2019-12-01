@@ -56,24 +56,25 @@ def isMinima(down, actual, up, x, y):
          up[y+1][x-1], up[y+1][x-0], up[y+1][x+1]]
     return min(a) >= target and min(b) >= target and min(c) >= target
 
-def contrastVerification(img, candidates, limit, octave): # limit = 0.03
+def contrastVerification(img, candidates, limit): # limit = 0.03
     keypoints = []
+    print("Total candidates : " + candidates.__len__().__str__())
     for candidate in candidates:
-        if abs(dog[candidate[1]][candidate[0]]) < limit:
+        if abs(img[candidate[1]][candidate[0]]) < limit:
             keypoints.append(candidate)
-
+    print("Eliminated candidates by contrast : " + (candidates.__len__() - keypoints.__len__()).__str__())
     return keypoints
 
-def eliminatingEdges(img, candidates, limit, octave): # limit = 10
+def eliminatingEdges(img, candidates, limit): # limit = 10
     keypoints = []
     for candidate in candidates:
         #dxx = img[candidate[0]+1][candidate[1]]-2*img[candidate[0]][candidate[1]]+img[candidate[0]-1][candidate[1]]
         #dxy = ((img[candidate[0]+1][candidate[1]+1]-img[candidate[0]-1][candidate[1]+1])-(img[candidate[0]+1][candidate[1]-1]-img[candidate[0]-1][candidate[1]-1]))/4
         #dyy = img[candidate[0]][candidate[1]+1]-2*img[candidate[0]][candidate[1]]+img[candidate[0]][candidate[1]-1]
 
-        dxx = dog[candidate[1]+1][candidate[0]]-2*dog[candidate[1]][candidate[0]]+dog[candidate[1]-1][candidate[0]]
-        dxy = ((dog[candidate[1]+1][candidate[0]+1]-dog[candidate[1]-1][candidate[0]+1])-(dog[candidate[1]+1][candidate[0]-1]-dog[candidate[1]-1][candidate[0]-1]))/4
-        dyy = dog[candidate[1]][candidate[0]+1]-2*dog[candidate[1]][candidate[0]]+dog[candidate[1]][candidate[0]-1]
+        dxx = img[candidate[1]+1][candidate[0]]-2*img[candidate[1]][candidate[0]]+img[candidate[1]-1][candidate[0]]
+        dxy = ((img[candidate[1]+1][candidate[0]+1]-img[candidate[1]-1][candidate[0]+1])-(img[candidate[1]+1][candidate[0]-1]-img[candidate[1]-1][candidate[0]-1]))/4
+        dyy = img[candidate[1]][candidate[0]+1]-2*img[candidate[1]][candidate[0]]+img[candidate[1]][candidate[0]-1]
 
 
         tr = dxx + dyy
@@ -85,11 +86,11 @@ def eliminatingEdges(img, candidates, limit, octave): # limit = 10
 
             if ratio < threshold:
                 keypoints.append(candidate)
-
+    print("Eliminated candidates because on an edge : " + (candidates.__len__() - keypoints.__len__()).__str__())
     return keypoints
 
-def getPoint(img,x,y,octave):
-    return img[x/pow(2,octave)][y/pow(2,octave)]
+#def getPoint(img,x,y,octave):
+    #return img[x/pow(2,octave)][y/pow(2,octave)]
 
 def getKeyPoints(dog, s, o):
     img = dog[s + o * scale]
@@ -102,7 +103,7 @@ def getKeyPoints(dog, s, o):
     return survivants
 
 if __name__ == '__main__':
-    img = openImage('droite.jpg')
+    img = openImage('Lenna.jpg')
 
     octave = 3
     scale = 4
@@ -128,5 +129,5 @@ if __name__ == '__main__':
             plt.autoscale(False)
             plt.plot(x,y, 'bo', markersize=2)
 
-
+    
     plt.show()
