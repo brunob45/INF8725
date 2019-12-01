@@ -72,9 +72,9 @@ def eliminatingEdges(img, candidates, limit): # limit = 10
         #dxy = ((img[candidate[0]+1][candidate[1]+1]-img[candidate[0]-1][candidate[1]+1])-(img[candidate[0]+1][candidate[1]-1]-img[candidate[0]-1][candidate[1]-1]))/4
         #dyy = img[candidate[0]][candidate[1]+1]-2*img[candidate[0]][candidate[1]]+img[candidate[0]][candidate[1]-1]
 
-        dxx = img[candidate[1]+1][candidate[0]]-2*img[candidate[1]][candidate[0]]+img[candidate[1]-1][candidate[0]]
-        dxy = ((img[candidate[1]+1][candidate[0]+1]-img[candidate[1]-1][candidate[0]+1])-(img[candidate[1]+1][candidate[0]-1]-img[candidate[1]-1][candidate[0]-1]))/4
-        dyy = img[candidate[1]][candidate[0]+1]-2*img[candidate[1]][candidate[0]]+img[candidate[1]][candidate[0]-1]
+        dyy = img[candidate[1]+1][candidate[0]]-2*img[candidate[1]][candidate[0]]+img[candidate[1]-1][candidate[0]]
+        dxy = ((img[candidate[1]+1][candidate[0]+1] - img[candidate[1]+1][candidate[0]-1]) - (img[candidate[1]-1][candidate[0]+1] - img[candidate[1]-1][candidate[0]-1]))/4
+        dxx = img[candidate[1]][candidate[0]+1]-2*img[candidate[1]][candidate[0]]+img[candidate[1]][candidate[0]-1]
 
 
         tr = dxx + dyy
