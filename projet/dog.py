@@ -11,15 +11,17 @@ from gaussian import applyGaussian
 
 def DoG(img, s, nb_octave):
     results = []
+    imgs = []
     imgcpy = img.copy()
     for octave in range(0,nb_octave):
         for scale in range(0,s):
+            imgs.append(img)
             imgcpy = applyGaussian(img, s)
             results.append(img - imgcpy)   #original line to get difference of Gaussian
             #results.append(imgcpy)              #test line to get filtered images
             img = imgcpy
         img = resize(img)
-    return results
+    return results, imgs
 
 
 if __name__ == '__main__':
@@ -28,7 +30,7 @@ if __name__ == '__main__':
     scale = 3
     octave = 2
 
-    results = DoG(img, scale, octave)
+    results,imgs = DoG(img, scale, octave)
 
     plt.plot([octave,scale])
 

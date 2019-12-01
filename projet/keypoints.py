@@ -10,7 +10,7 @@ import scipy.ndimage as ndimage
 import scipy.ndimage.filters as filters
 import matplotlib.pyplot as plt
 
-def localExtremaDetection(down, actual, up):
+def localExtremaDetection(down, actual, up, s):
     if len(down) != len(actual) or len(actual) != len(up):
         return ([], [])
 
@@ -20,9 +20,9 @@ def localExtremaDetection(down, actual, up):
     for y in range(1, len(actual)-1):
         for x in range(1, len(actual[y])-1):
             if isMaxima(down, actual, up, x, y):
-                maxima.append((x,y))
+                maxima.append((x,y,s))
             elif isMinima(down, actual, up, x, y):
-                minima.append((x,y))
+                minima.append((x,y,s))
     return (maxima, minima)
 
 def isMaxima(down, actual, up, x, y):
@@ -93,13 +93,14 @@ def eliminatingEdges(img, candidates, limit): # limit = 10
     #return img[x/pow(2,octave)][y/pow(2,octave)]
 
 def getKeyPoints(dog, s, o):
-    img = dog[s + o * scale]
+    #img = dog[s + o * scale]
     # (maxima, minima) = localExtremaDetection(dog[s-1 + o * scale], img, dog[s+1 + o * scale])
-    (maxima, minima) = localExtremaDetection(dog[s + o * scale], img, dog[s + o * scale])
+    #(maxima, minima) = localExtremaDetection(dog[s + o * scale], img, dog[s + o * scale])
+    (maxima, minima) = localExtremaDetection(dog, dog, dog, s)
 
     survivants = maxima + minima
-    survivants = contrastVerification(img, survivants, limit=0.03)
-    survivants = eliminatingEdges(img, survivants, limit=10)
+    survivants = contrastVerification(dog, survivants, limit=0.03)
+    survivants = eliminatingEdges(dog, survivants, limit=10)
     return survivants
 
 if __name__ == '__main__':
@@ -108,7 +109,7 @@ if __name__ == '__main__':
     octave = 3
     scale = 4
 
-    results = DoG(img, scale, octave)
+    results,imgs = DoG(img, scale, octave)
 
     plt.plot([octave,scale])
 
@@ -116,7 +117,7 @@ if __name__ == '__main__':
         for s in range(1,scale-1):
             print(o, s)
             img = results[s + o * scale]
-            survivants = getKeyPoints(results, s, o)
+            survivants = getKeyPoints(results[s + o * scale], s, o)
 
             plt.subplot(octave, scale, 1 + o*scale +s)
             show(img)
