@@ -123,7 +123,7 @@ if __name__ == '__main__':
             show(img)
 
             x, y = [], []
-            for i,j in survivants:
+            for i,j,s in survivants:
                 x.append(i)
                 y.append(j)
 
