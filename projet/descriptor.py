@@ -49,6 +49,7 @@ def assignOrientation(img, keypoints):
                 w = gaussianFilter[j+width, i+width]*length
                 hist[a] += w
 
+        #for # bin
 
         orientedKeypoints.append((keypoint[0], keypoint[1], keypoint[2], angle, length))
 

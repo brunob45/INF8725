@@ -36,6 +36,7 @@ def isMaxima(down, actual, up, x, y):
     c = [up[y-1][x-1], up[y-1][x-0], up[y-1][x+1],
          up[y-0][x-1], up[y-0][x-0], up[y-0][x+1],
          up[y+1][x-1], up[y+1][x-0], up[y+1][x+1]]
+
     maxima = max(a+b+c)
     maxa = max(a)
     maxb = max(b)
@@ -58,6 +59,7 @@ def isMinima(down, actual, up, x, y):
     c = [up[y-1][x-1], up[y-1][x-0], up[y-1][x+1],
          up[y-0][x-1], up[y-0][x-0], up[y-0][x+1],
          up[y+1][x-1], up[y+1][x-0], up[y+1][x+1]]
+
     minima = min(a+b+c)
     mina = min(a)
     minb = min(b)
@@ -70,19 +72,16 @@ def isMinima(down, actual, up, x, y):
 
 def contrastVerification(img, candidates, limit=0.03): # limit = 0.03
     keypoints = []
-
-    print("Total candidates : " + candidates.__len__().__str__())
     for candidate in candidates:
         dx = (img[candidate[1]][candidate[0]+1]-img[candidate[1]][candidate[0]-1])/2
         dy = (img[candidate[1]+1][candidate[0]]-img[candidate[1]-1][candidate[0]])/2
 
         if abs(dx) > limit or abs(dy) > limit:
             keypoints.append(candidate)
-    print("Eliminated candidates by contrast : " + (candidates.__len__() - keypoints.__len__()).__str__())
+    print("Eliminated candidates by contrast:", len(candidates) - len(keypoints))
     return keypoints
 
 def eliminatingEdges(img, candidates, limit=10): # limit = 10
-    print("Total candidates : " + candidates.__len__().__str__())
     keypoints = []
     for candidate in candidates:
         #dxx = img[candidate[0]+1][candidate[1]]-2*img[candidate[0]][candidate[1]]+img[candidate[0]-1][candidate[1]]
@@ -103,21 +102,17 @@ def eliminatingEdges(img, candidates, limit=10): # limit = 10
 
             if ratio < threshold:
                 keypoints.append(candidate)
-    print("Eliminated candidates because on an edge : " + (candidates.__len__() - keypoints.__len__()).__str__())
+    print("Eliminated candidates because on an edge:", len(candidates) - len(keypoints))
     return keypoints
 
-#def getPoint(img,x,y,octave):
-    #return img[x/pow(2,octave)][y/pow(2,octave)]
-
 def getKeyPoints(down,dog,up, s, o):
-    #img = dog[s + o * scale]
-    # (maxima, minima) = localExtremaDetection(dog[s-1 + o * scale], img, dog[s+1 + o * scale])
-    #(maxima, minima) = localExtremaDetection(dog[s + o * scale], img, dog[s + o * scale])
     (maxima, minima) = localExtremaDetection(down, dog, up, s)
 
     survivants = maxima + minima
-    survivants = contrastVerification(dog, survivants,0.03)
+    print("Total candidates:", len(survivants))
+    survivants = contrastVerification(dog, survivants)
     survivants = eliminatingEdges(dog, survivants)
+    print("Surviving candidates:", len(survivants))
     return survivants
 
 if __name__ == '__main__':

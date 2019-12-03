@@ -10,19 +10,16 @@ from PIL import Image
 from gaussian import applyGaussian
 
 def DoG(img, s, nb_octave):
-    results = []
-    imgs = []
-    imgcpy = img.copy()
+    diffs = []
     for octave in range(0,nb_octave):
+        previous = img
         for scale in range(0,s):
-            imgs.append(img)
-            imgcpy = applyGaussian(img, s)
-            dog = normalizeDoG(img,imgcpy)
-            results.append(dog)   #original line to get difference of Gaussian
-            #results.append(imgcpy)              #test line to get filtered images
-            img = imgcpy
+            current = applyGaussian(img, scale, s)
+            dog = normalizeDoG(previous,current)
+            diffs.append(dog)   #difference of Gaussian
+            previous = current
         img = resize(img)
-    return results, imgs
+    return diffs
 
 def normalizeDoG(img,cpy):
     dog = img-cpy
@@ -34,7 +31,7 @@ if __name__ == '__main__':
     scale = 3
     octave = 2
 
-    results,imgs = DoG(img, scale, octave)
+    results = DoG(img, scale, octave)
 
     plt.plot([octave,scale])
 
