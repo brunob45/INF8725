@@ -15,11 +15,15 @@ def DoG(img, s, nb_octave):
         previous = img
         for scale in range(0,s):
             current = applyGaussian(img, scale, s)
-            diffs.append(previous - current)   #difference of Gaussian
+            dog = normalizeDoG(previous,current)
+            diffs.append(dog)   #difference of Gaussian
             previous = current
         img = resize(img)
     return diffs
 
+def normalizeDoG(img,cpy):
+    dog = img-cpy
+    return (dog-np.min(dog))/(np.max(dog)-np.min(dog))
 
 if __name__ == '__main__':
     img = openImage('Lenna.jpg')
