@@ -9,7 +9,9 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 def applyGaussian(img, s):
-    return gaussian_filter(img, sigma=2**(1/(s-1)))
+    sigma = 1.6
+    g = sigma*(2**(1/(s-1)))
+    return gaussian_filter(img, g)
     # return gaussian_filter(img, sigma=0.7950)
 
     filtre = np.array([[1/16, 1/8, 1/16],

@@ -41,9 +41,6 @@ def isMaxima(down, actual, up, x, y):
     maxb = max(b)
     maxc = max(c)
 
-    #if maxc > 0.25 or maxa > 0.25:
-        #return True
-
     if maxima < target:
         return True
     else:
@@ -65,9 +62,6 @@ def isMinima(down, actual, up, x, y):
     mina = min(a)
     minb = min(b)
     minc = min(c)
-
-    #if minima < -0.25:
-        #return True
 
     if minima > target:
         return True
