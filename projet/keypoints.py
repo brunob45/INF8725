@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from imgproc import openImage, show, resize
-from dog import DoG
+from dog import differenceDeGaussiennes
 import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,18 +12,16 @@ import matplotlib.pyplot as plt
 
 def localExtremaDetection(down, actual, up):
     if len(down) != len(actual) or len(actual) != len(up):
-        return ([], [])
+        return ([])
 
-    maxima = []
-    minima = []
-
+    extrema = []
     for y in range(1, len(actual)-1):
         for x in range(1, len(actual[y])-1):
             if isMaxima(down, actual, up, x, y):
-                maxima.append((x,y))
+                extrema.append((x,y))
             elif isMinima(down, actual, up, x, y):
-                minima.append((x,y))
-    return (maxima, minima)
+                extrema.append((x,y))
+    return extrema
 
 def isMaxima(down, actual, up, x, y):
     target = actual[y][x]
@@ -101,39 +99,38 @@ def eliminatingEdges(img, candidates, limit=10):
     print("Eliminated candidates because on an edge:", len(candidates) - len(keypoints))
     return keypoints
 
-def getKeyPoints(down,dog,up, sigma=1.0):
-    (maxima, minima) = localExtremaDetection(down, dog, up)
-
-    survivants = maxima + minima
-    print("Total candidates:", len(survivants))
-    survivants = contrastVerification(dog, survivants)
-    survivants = eliminatingEdges(dog, survivants)
-    print("Surviving candidates:", len(survivants))
-
-    result = []
-    for (x,y) in survivants:
-        result.append((x, y, sigma))
-    return result
-
 def getOriginalCoordinates(c,o):
     return c*pow(2,o)
 
+def detectionPointsCles(DoG, sigma=1.0, seuil_contraste=0.03, r_courb_principale=10, resolution_octave=3):
+    survivants = []
+    for s in range(2, len(DoG)):
+        img = DoG[s-1]
+        kps = localExtremaDetection(DoG[s-2],DoG[s-1],DoG[s])
+
+        print("Total candidates:", len(kps))
+        kps = contrastVerification(img, kps, seuil_contraste)
+        kps = eliminatingEdges(img, kps, r_courb_principale)
+        print("Surviving candidates:", len(kps))
+
+        for (x,y) in kps:
+            survivants.append((x, y, sigma))
+
+    return survivants
+
+
 if __name__ == '__main__':
-    img = openImage('droite.jpg')
+    img = openImage('Lenna.jpg')
 
     octave = 2
     scale = 3
 
-    (diffs, imgs) = DoG(img, scale, octave)
+    (diffs, imgs) = differenceDeGaussiennes(img, scale, octave)
 
     plt.plot([1,octave])
 
     for o in range(0,octave):
-        survivants = []
-        for s in range(0,scale):
-            print(o, s)
-            sigma = 2**(1/scale)
-            survivants += getKeyPoints(diffs[o][s],diffs[o][s+1],diffs[o][s+2], sigma)
+        survivants = detectionPointsCles(diffs[o], seuil_contraste=0.02)
 
         plt.subplot(1, octave, 1 + o)
         show(imgs[o][0])

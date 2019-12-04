@@ -19,18 +19,17 @@ def get_dog_octave(img, scale):
 
     return (octave, imgs)
 
-def DoG(img, scale, nb_octave, sigma=1.6):
+def differenceDeGaussiennes(image_initiale, s, nb_octave):
     diffs = []
     imgs = []
 
-    img = applys0(img, sigma)
-
+    img = image_initiale
     for _ in range(0,nb_octave):
-        (octave, i) = get_dog_octave(img, scale)
+        (octave, i) = get_dog_octave(img, s)
         diffs.append(octave)
         imgs.append(i)
 
-        img = resize(i[scale])
+        img = resize(i[s])
 
     return (diffs, imgs)
 
@@ -44,7 +43,7 @@ if __name__ == '__main__':
     scale = 3
     octave = 2
 
-    (results, _) = DoG(img, scale, octave, 1.6)
+    (results, _) = differenceDeGaussiennes(img, scale, octave)
 
     plt.plot([octave,scale])
 

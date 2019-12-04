@@ -1,6 +1,6 @@
 from imgproc import openImage, show, resize
-from dog import DoG
-from keypoints import getKeyPoints, getOriginalCoordinates
+from dog import differenceDeGaussiennes
+from keypoints import detectionPointsCles, getOriginalCoordinates
 from scipy.stats import norm
 from scipy.ndimage import gaussian_filter
 import numpy as np
@@ -165,21 +165,17 @@ if __name__ == '__main__':
     octave = 3
     scale = 4
 
-    (diffs, imgs) = DoG(img, scale, octave)
+    (diffs, imgs) = differenceDeGaussiennes(img, scale, octave)
 
     plt.plot([1,octave])
 
     descriptors = []
 
     for o in range(0,octave):
-        survivants = []
-        for s in range(0,scale):
-            print(o, s)
-            sigma = 2**(1/scale)
-            survivants += getKeyPoints(diffs[o][s],diffs[o][s+1],diffs[o][s+2], sigma)
+        survivants = detectionPointsCles(diffs[o], seuil_contraste=0.02)
 
-        keypoints = assignOrientation(diffs[o][s+1], survivants)
-        octaveDescriptors = descriptionPointsCles(imgs[o][s+1], keypoints)
+        keypoints = assignOrientation(diffs[o][0], survivants)
+        octaveDescriptors = descriptionPointsCles(imgs[o][0], keypoints)
         descriptors.extend(octaveDescriptors)
 
         plt.subplot(1, octave, 1 + o)
