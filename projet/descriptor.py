@@ -12,16 +12,13 @@ def descriptionPointsCles(img, keypoints):
     for keypoint in keypoints:
         descriptors.append(createDescriptor(img, keypoint))
 
-
     return descriptors
 
 def createDescriptor(img, keypoint):
     descriptor = []
-    descriptor.append[keypoint[0]]
-    descriptor.append[keypoint[1]]
 
     # filtre gaussien
-    x = np.linspace(-keypoint[2]*1.5, keypoint[2]*1.5, 16)
+    x = np.linspace(-keypoint[2]*1.5, keypoint[2]*1.5, 8)
     d1 = np.diff(norm.cdf(x))
     d2 = np.outer(d1, d1)
     gaussianFilter = (d2/d2.sum())
@@ -39,7 +36,7 @@ def createDescriptor(img, keypoint):
     # Division en 4x4 sous-régions
     subregions = []
 
-    for s in range(0,4):
+    for region in range(0,4):
         startx = 0
         starty = 4
         subregion = np.zeros((4,4))
@@ -58,7 +55,24 @@ def createDescriptor(img, keypoint):
 
         subregions.append(subregion)
 
-    # Création des 8 histogrammes par sous-régions
+    # Création des histogrammes
+    hists = []
+
+    for region in range(0,4):
+        hist = np.zeros(8, dtype=np.float)
+        for i in range(0,4):
+            for j in range(0,4):
+                a,l = int(np.floor(subregions[region][i][j])//(360//8))
+                hist[a] += l
+        hists.append(hist)
+
+    # Construction du descripteur
+    descriptor.append[keypoint[0]] # x
+    descriptor.append[keypoint[1]] # y
+
+    for hist in range(0,hists.__len__()):
+        for value in range(0, hist.__len__()):
+            descriptor.append(hists[hist][value])
 
     return descriptor
 
@@ -152,9 +166,10 @@ if __name__ == '__main__':
     for o in range(0,octave):
         for s in range(1,scale-1):
             print(o, s)
-            img = results[s + o * scale]
-            survivants = getKeyPoints(results[s-1 + o * scale],results[s + o * scale],results[s+1 + o * scale], s, o)
-            keypoints = assignOrientation(results[s + o * scale], survivants)
+            dog = results[s + o * scale]
+            survivants = getKeyPoints(dog[s-1 + o * scale],dog[s + o * scale],dog[s+1 + o * scale], s, o)
+            keypoints = assignOrientation(dog[s + o * scale], survivants)
+            descriptors = descriptionPointsCles(img, keypoints)
 
             plt.subplot(octave, scale, 1 + o*scale+s)
             show(openImage('Lenna.jpg'))
