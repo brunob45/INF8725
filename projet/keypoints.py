@@ -101,7 +101,7 @@ def eliminatingEdges(img, candidates, limit=10):
     print("Eliminated candidates because on an edge:", len(candidates) - len(keypoints))
     return keypoints
 
-def getKeyPoints(down,dog,up, sigma):
+def getKeyPoints(down,dog,up, sigma=1.0):
     (maxima, minima) = localExtremaDetection(down, dog, up)
 
     survivants = maxima + minima
