@@ -8,14 +8,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-<<<<<<< HEAD
-def applyGaussian(img, s):
-    sigma = 1.6
-    g = sigma*(2**(1/(s-1)))
-    return gaussian_filter(img, g)
-    # return gaussian_filter(img, sigma=0.7950)
-=======
->>>>>>> 14ee4bcc31aa708d8cacbd506de45cb91587e775
 
 def applyGaussian(img, i, s):
     return gaussian_filter(img, sigma=2**(i/s))
