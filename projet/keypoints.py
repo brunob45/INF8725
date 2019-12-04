@@ -117,28 +117,29 @@ def detectionPointsCles(DoG, sigma=1.0, seuil_contraste=0.03, r_courb_principale
 
 
 if __name__ == '__main__':
-    img = openImage('Lenna.jpg')
+    img = openImage('droite.jpg')
 
-    octave = 2
-    scale = 3
+    octave = 3
+    scale = 4
 
     (diffs, imgs) = differenceDeGaussiennes(img, scale, octave)
 
-    plt.plot([1,octave])
+    ax = plt.subplot(111)
+    plt.title('droite')
+    show(img)
+    plt.autoscale(False)
 
     for o in range(0,octave):
         survivants = detectionPointsCles(diffs[o], seuil_contraste=0.02)
 
-        plt.subplot(1, octave, 1 + o)
-        show(imgs[o][0])
-
         x, y = [], []
         for (i, j, k) in survivants:
-            x.append(i)
-            y.append(j)
+            x.append(getOriginalCoordinates(i,o))
+            y.append(getOriginalCoordinates(j,o))
 
-        plt.title(o)
-        plt.autoscale(False)
-        plt.plot(x,y, 'bo', markersize=2)
+        ax.plot(x, y, marker='o', linewidth=0, markersize=5, label=str(o))
+
+
+    ax.legend()
 
     plt.show()

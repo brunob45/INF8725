@@ -190,11 +190,12 @@ if __name__ == '__main__':
         survivants = detectionPointsCles(diffs[o], seuil_contraste=0.02)
 
         keypoints = assignOrientation(diffs[o][0], survivants)
-        # octaveDescriptors = descriptionPointsCles(imgs[o][0], keypoints)
-        # descriptors.extend(octaveDescriptors)
+        octaveDescriptors = descriptionPointsCles(imgs[o][0], keypoints)
+        descriptors.extend(octaveDescriptors)
 
         output = np.empty((4,0))
         for (i,j,s,a,l) in keypoints:
             np.append(output, [i,j,s,a])
 
     np.save("keypoints.npy", output)
+    np.save("descriptors.npy", descriptors)
