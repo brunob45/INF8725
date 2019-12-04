@@ -66,6 +66,4 @@ if __name__ == '__main__':
         plt.autoscale(False)
         plt.plot(x,y, 'bo', markersize=2)
 
-    #plt.show()
-
     distanceInterPoints(descriptors, descriptors)
