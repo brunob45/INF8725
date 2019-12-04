@@ -136,7 +136,7 @@ if __name__ == '__main__':
         for s in range(0,scale):
             print(o, s)
             sigma = 2**(s/scale+o)
-            survivants = getKeyPoints(results[s + o * scale],results[s+1 + o * scale],results[s+2 + o * scale], sigma)
+            survivants = getKeyPoints(results[o][s],results[o][s+1],results[o][s+2], sigma)
 
             plt.subplot(octave, scale, 1 + o*scale +s)
             show(img)
