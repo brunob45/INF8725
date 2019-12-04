@@ -70,7 +70,7 @@ def isMinima(down, actual, up, x, y):
     else:
         return False
 
-def contrastVerification(img, candidates, limit=0.03): # limit = 0.03
+def contrastVerification(img, candidates, limit=0.03):
     keypoints = []
     for (x,y) in candidates:
         dx = (img[y][x+1]-img[y][x-1])/2
@@ -81,17 +81,12 @@ def contrastVerification(img, candidates, limit=0.03): # limit = 0.03
     print("Eliminated candidates by contrast:", len(candidates) - len(keypoints))
     return keypoints
 
-def eliminatingEdges(img, candidates, limit=10): # limit = 10
+def eliminatingEdges(img, candidates, limit=10):
     keypoints = []
     for (x,y) in candidates:
-        #dxx = img[candidate[0]+1][candidate[1]]-2*img[candidate[0]][candidate[1]]+img[candidate[0]-1][candidate[1]]
-        #dxy = ((img[candidate[0]+1][candidate[1]+1]-img[candidate[0]-1][candidate[1]+1])-(img[candidate[0]+1][candidate[1]-1]-img[candidate[0]-1][candidate[1]-1]))/4
-        #dyy = img[candidate[0]][candidate[1]+1]-2*img[candidate[0]][candidate[1]]+img[candidate[0]][candidate[1]-1]
-
         dyy = img[y+1][x]-2*img[y][x]+img[y-1][x]
         dxy = ((img[y+1][x+1] - img[y+1][x-1]) - (img[y-1][x+1] - img[y-1][x-1]))/4
         dxx = img[y][x+1]-2*img[y][x]+img[y][x-1]
-
 
         tr = dxx + dyy
         det = dxx*dyy - pow(dxy,2)
@@ -102,6 +97,7 @@ def eliminatingEdges(img, candidates, limit=10): # limit = 10
 
             if ratio < threshold:
                 keypoints.append((x,y))
+
     print("Eliminated candidates because on an edge:", len(candidates) - len(keypoints))
     return keypoints
 
