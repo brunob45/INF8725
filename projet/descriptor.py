@@ -158,6 +158,23 @@ def fitParabola(hist, indexMax): #10
 
     return (x2 + 0.5*((y1-y2)*pow((x3-x2),2)-(y3-y2)*pow((x2-x1),2))/((y1-y2)*(x3-x2)+(y3-y2)*(x2-x1)))
 
+def get_descriptors(img, s, nb_octave):
+    descriptors = []
+
+    (diffs, imgs) = differenceDeGaussiennes(img, s, nb_octave)
+
+    for octave in range(0,nb_octave):
+        survivants = detectionPointsCles(diffs[octave], seuil_contraste=0.02)
+
+        keypoints = assignOrientation(diffs[octave][0], survivants)
+        octaveDescriptors = descriptionPointsCles(imgs[octave][0], keypoints)
+        descriptors.extend(octaveDescriptors)
+
+        plt.subplot(1, nb_octave, 1 + octave)
+
+    return descriptors
+
+
 if __name__ == '__main__':
 
     img = openImage('Lenna.jpg')
@@ -167,32 +184,17 @@ if __name__ == '__main__':
 
     (diffs, imgs) = differenceDeGaussiennes(img, scale, octave)
 
-    plt.plot([1,octave])
-
     descriptors = []
 
     for o in range(0,octave):
         survivants = detectionPointsCles(diffs[o], seuil_contraste=0.02)
 
         keypoints = assignOrientation(diffs[o][0], survivants)
-        octaveDescriptors = descriptionPointsCles(imgs[o][0], keypoints)
-        descriptors.extend(octaveDescriptors)
+        # octaveDescriptors = descriptionPointsCles(imgs[o][0], keypoints)
+        # descriptors.extend(octaveDescriptors)
 
-        plt.subplot(1, octave, 1 + o)
-        
-        #show(imgs[o][0])
-        show(openImage('Lenna.jpg'))
-
-        x, y = [], []
+        output = np.empty((4,0))
         for (i,j,s,a,l) in keypoints:
-            x.append(getOriginalCoordinates(i,o))
-            y.append(getOriginalCoordinates(j,o))
-            print("x : ", i, ", y : ", j, ", angle :", a, ", length : ", l)
+            np.append(output, [i,j,s,a])
 
-        plt.title(o)
-        plt.autoscale(False)
-        plt.plot(x,y, 'bo', markersize=2)
-
-    d = descriptors[12]
-
-    plt.show()
+    np.save("keypoints.npy", output)

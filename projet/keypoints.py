@@ -2,13 +2,10 @@
 
 from imgproc import openImage, show, resize
 from dog import differenceDeGaussiennes
+
 import numpy as np
 import matplotlib.pyplot as plt
-import numpy as np
-import scipy
-import scipy.ndimage as ndimage
-import scipy.ndimage.filters as filters
-import matplotlib.pyplot as plt
+
 
 def localExtremaDetection(down, actual, up):
     if len(down) != len(actual) or len(actual) != len(up):
