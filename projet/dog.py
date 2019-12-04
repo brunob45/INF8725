@@ -13,7 +13,7 @@ def DoG(img, s, nb_octave):
     diffs = []
     for octave in range(0,nb_octave):
         previous = img
-        for scale in range(0,s):
+        for scale in range(0,s+2):
             current = applyGaussian(img, scale, s)
             dog = normalizeDoG(previous,current)
             diffs.append(dog)   #difference of Gaussian

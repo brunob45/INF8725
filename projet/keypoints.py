@@ -20,9 +20,9 @@ def localExtremaDetection(down, actual, up, s):
     for y in range(1, len(actual)-1):
         for x in range(1, len(actual[y])-1):
             if isMaxima(down, actual, up, x, y):
-                maxima.append((x,y,s))
+                maxima.append((x,y))
             elif isMinima(down, actual, up, x, y):
-                minima.append((x,y,s))
+                minima.append((x,y))
     return (maxima, minima)
 
 def isMaxima(down, actual, up, x, y):
@@ -72,25 +72,25 @@ def isMinima(down, actual, up, x, y):
 
 def contrastVerification(img, candidates, limit=0.03): # limit = 0.03
     keypoints = []
-    for candidate in candidates:
-        dx = (img[candidate[1]][candidate[0]+1]-img[candidate[1]][candidate[0]-1])/2
-        dy = (img[candidate[1]+1][candidate[0]]-img[candidate[1]-1][candidate[0]])/2
+    for (x,y) in candidates:
+        dx = (img[y][x+1]-img[y][x-1])/2
+        dy = (img[y+1][x]-img[y-1][x])/2
 
         if abs(dx) > limit or abs(dy) > limit:
-            keypoints.append(candidate)
+            keypoints.append((x,y))
     print("Eliminated candidates by contrast:", len(candidates) - len(keypoints))
     return keypoints
 
 def eliminatingEdges(img, candidates, limit=10): # limit = 10
     keypoints = []
-    for candidate in candidates:
+    for (x,y) in candidates:
         #dxx = img[candidate[0]+1][candidate[1]]-2*img[candidate[0]][candidate[1]]+img[candidate[0]-1][candidate[1]]
         #dxy = ((img[candidate[0]+1][candidate[1]+1]-img[candidate[0]-1][candidate[1]+1])-(img[candidate[0]+1][candidate[1]-1]-img[candidate[0]-1][candidate[1]-1]))/4
         #dyy = img[candidate[0]][candidate[1]+1]-2*img[candidate[0]][candidate[1]]+img[candidate[0]][candidate[1]-1]
 
-        dyy = img[candidate[1]+1][candidate[0]]-2*img[candidate[1]][candidate[0]]+img[candidate[1]-1][candidate[0]]
-        dxy = ((img[candidate[1]+1][candidate[0]+1] - img[candidate[1]+1][candidate[0]-1]) - (img[candidate[1]-1][candidate[0]+1] - img[candidate[1]-1][candidate[0]-1]))/4
-        dxx = img[candidate[1]][candidate[0]+1]-2*img[candidate[1]][candidate[0]]+img[candidate[1]][candidate[0]-1]
+        dyy = img[y+1][x]-2*img[y][x]+img[y-1][x]
+        dxy = ((img[y+1][x+1] - img[y+1][x-1]) - (img[y-1][x+1] - img[y-1][x-1]))/4
+        dxx = img[y][x+1]-2*img[y][x]+img[y][x-1]
 
 
         tr = dxx + dyy
@@ -101,7 +101,7 @@ def eliminatingEdges(img, candidates, limit=10): # limit = 10
             threshold = pow(limit+1,2)/limit
 
             if ratio < threshold:
-                keypoints.append(candidate)
+                keypoints.append((x,y))
     print("Eliminated candidates because on an edge:", len(candidates) - len(keypoints))
     return keypoints
 
@@ -129,21 +129,19 @@ if __name__ == '__main__':
     plt.plot([octave,scale])
 
     for o in range(0,octave):
-        for s in range(1,scale-1):
+        for s in range(0,scale):
             print(o, s)
-            img = results[s + o * scale]
-            survivants = getKeyPoints(results[s-1 + o * scale],results[s + o * scale],results[s+1 + o * scale], s, o)
+            survivants = getKeyPoints(results[s + o * scale],results[s+1 + o * scale],results[s+2 + o * scale], s, o)
 
             plt.subplot(octave, scale, 1 + o*scale +s)
-            show(openImage('Lenna.jpg'))
+            show(img)
 
             x, y = [], []
-            for i,j,s in survivants:
+            for (i,j) in survivants:
                 x.append(getOriginalCoordinates(i,o))
                 y.append(getOriginalCoordinates(j,o))
 
             plt.autoscale(False)
             plt.plot(x,y, 'bo', markersize=2)
 
-    
     plt.show()
