@@ -17,15 +17,20 @@ def get_dog_octave(img, scale, sigma=1.0):
         octave.append(normalizeDoG(imgs[i], imgs[i-1]))
         # octave.append(imgs[i] - imgs[i-1])   #difference of Gaussian
 
-    return (octave, imgs[scale])
+    return (octave, imgs)
 
 def DoG(img, scale, nb_octave):
     diffs = []
+    imgs = []
+
     for _ in range(0,nb_octave):
-        (octave, img) = get_dog_octave(img, scale)
+        (octave, i) = get_dog_octave(img, scale)
         diffs.append(octave)
-        img = resize(img)
-    return diffs
+        imgs.append(i)
+
+        img = resize(i[scale])
+
+    return (diffs, imgs)
 
 def normalizeDoG(img,cpy):
     dog = img-cpy
@@ -41,7 +46,7 @@ if __name__ == '__main__':
 
     plt.plot([octave,scale])
 
-    for j in range(0,octave):
+    for j in range(1,octave):
         for i in range(0,scale):
             img = results[j][i]
             plt.subplot(octave, scale, 1 + j*scale +i)

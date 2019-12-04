@@ -84,9 +84,9 @@ def contrastVerification(img, candidates, limit=0.03):
 def eliminatingEdges(img, candidates, limit=10):
     keypoints = []
     for (x,y) in candidates:
-        dyy = img[y+1][x]-2*img[y][x]+img[y-1][x]
+        dyy = img[y+1][x] - 2*img[y][x] + img[y-1][x]
         dxy = ((img[y+1][x+1] - img[y+1][x-1]) - (img[y-1][x+1] - img[y-1][x-1]))/4
-        dxx = img[y][x+1]-2*img[y][x]+img[y][x-1]
+        dxx = img[y][x+1] - 2*img[y][x] + img[y][x-1]
 
         tr = dxx + dyy
         det = dxx*dyy - pow(dxy,2)
@@ -119,31 +119,32 @@ def getOriginalCoordinates(c,o):
     return c*pow(2,o)
 
 if __name__ == '__main__':
-    img = openImage('Lenna.jpg')
+    img = openImage('droite.jpg')
 
-    octave = 4
-    scale = 6
+    octave = 2
+    scale = 3
 
-    results = DoG(img, scale, octave)
+    (diffs, imgs) = DoG(img, scale, octave)
 
-    plt.plot([octave,scale])
+    plt.plot([1,octave])
 
     for o in range(0,octave):
+        survivants = []
         for s in range(0,scale):
             print(o, s)
-            sigma = 2**(s/scale+o)
-            survivants = getKeyPoints(results[o][s],results[o][s+1],results[o][s+2], sigma)
+            sigma = 2**(1/scale)
+            survivants += getKeyPoints(diffs[o][s],diffs[o][s+1],diffs[o][s+2], sigma)
 
-            plt.subplot(octave, scale, 1 + o*scale +s)
-            show(img)
+        plt.subplot(1, octave, 1 + o)
+        show(imgs[o][0])
 
-            x, y = [], []
-            for (i, j, k) in survivants:
-                x.append(getOriginalCoordinates(i,o))
-                y.append(getOriginalCoordinates(j,o))
+        x, y = [], []
+        for (i, j, k) in survivants:
+            x.append(i)
+            y.append(j)
 
-            plt.title(sigma)
-            plt.autoscale(False)
-            plt.plot(x,y, 'bo', markersize=2)
+        plt.title(o)
+        plt.autoscale(False)
+        plt.plot(x,y, 'bo', markersize=2)
 
     plt.show()
