@@ -25,7 +25,7 @@ if __name__ == '__main__':
         for i in range(0,scale):
             tmp = applyGaussian(tmp, i, scale)
             plt.subplot(octave, scale, 1 + j*scale +i)
-            plt.title((j+1)*2**(i/scale))
+            plt.title(2**(i/scale+j))
             show(tmp)
         img = resize(img)
 

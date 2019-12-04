@@ -10,7 +10,7 @@ import scipy.ndimage as ndimage
 import scipy.ndimage.filters as filters
 import matplotlib.pyplot as plt
 
-def localExtremaDetection(down, actual, up, s):
+def localExtremaDetection(down, actual, up):
     if len(down) != len(actual) or len(actual) != len(up):
         return ([], [])
 
@@ -105,15 +105,19 @@ def eliminatingEdges(img, candidates, limit=10): # limit = 10
     print("Eliminated candidates because on an edge:", len(candidates) - len(keypoints))
     return keypoints
 
-def getKeyPoints(down,dog,up, s, o):
-    (maxima, minima) = localExtremaDetection(down, dog, up, s)
+def getKeyPoints(down,dog,up, sigma):
+    (maxima, minima) = localExtremaDetection(down, dog, up)
 
     survivants = maxima + minima
     print("Total candidates:", len(survivants))
     survivants = contrastVerification(dog, survivants)
     survivants = eliminatingEdges(dog, survivants)
     print("Surviving candidates:", len(survivants))
-    return survivants
+
+    result = []
+    for (x,y) in survivants:
+        result.append((x, y, sigma))
+    return result
 
 def getOriginalCoordinates(c,o):
     return c*pow(2,o)
@@ -131,16 +135,18 @@ if __name__ == '__main__':
     for o in range(0,octave):
         for s in range(0,scale):
             print(o, s)
-            survivants = getKeyPoints(results[s + o * scale],results[s+1 + o * scale],results[s+2 + o * scale], s, o)
+            sigma = 2**(s/scale+o)
+            survivants = getKeyPoints(results[s + o * scale],results[s+1 + o * scale],results[s+2 + o * scale], sigma)
 
             plt.subplot(octave, scale, 1 + o*scale +s)
             show(img)
 
             x, y = [], []
-            for (i,j) in survivants:
+            for (i, j, k) in survivants:
                 x.append(getOriginalCoordinates(i,o))
                 y.append(getOriginalCoordinates(j,o))
 
+            plt.title(sigma)
             plt.autoscale(False)
             plt.plot(x,y, 'bo', markersize=2)
 
