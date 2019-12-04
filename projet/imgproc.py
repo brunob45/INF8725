@@ -16,7 +16,7 @@ def show(img):
 def resize(myImg):
     if type(myImg) is np.ndarray:
         myImg = Image.fromarray(myImg)
-    return myImg.resize((int(myImg.width/2), int(myImg.height/2)), Image.ANTIALIAS)
+    return np.array(myImg.resize((int(myImg.width/2), int(myImg.height/2)), Image.ANTIALIAS))
 
 if __name__ == '__main__':
     img = openImage('Lenna.jpg')
@@ -32,6 +32,6 @@ if __name__ == '__main__':
 
     plt.subplot(1, 3, 3)
     img = resize(img)
-    show(img)
+    show(img.rotate(10))
 
     plt.show()

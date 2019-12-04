@@ -7,11 +7,11 @@ from scipy.ndimage import gaussian_filter
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
-from gaussian import applyGaussian, get_octave
+from gaussian import applys0, get_octave
 
-def get_dog_octave(img, scale, sigma=1.0):
+def get_dog_octave(img, scale):
     octave = []
-    imgs = get_octave(img, scale, sigma)
+    imgs = get_octave(img, scale)
 
     for i in range(1, len(imgs)):
         octave.append(normalizeDoG(imgs[i], imgs[i-1]))
@@ -19,9 +19,11 @@ def get_dog_octave(img, scale, sigma=1.0):
 
     return (octave, imgs)
 
-def DoG(img, scale, nb_octave):
+def DoG(img, scale, nb_octave, sigma=1.6):
     diffs = []
     imgs = []
+
+    img = applys0(img, sigma)
 
     for _ in range(0,nb_octave):
         (octave, i) = get_dog_octave(img, scale)
@@ -37,20 +39,20 @@ def normalizeDoG(img,cpy):
     return (dog-np.min(dog))/(np.max(dog)-np.min(dog))
 
 if __name__ == '__main__':
-    img = openImage('Lenna.jpg')
+    img = openImage('droite.jpg')
 
-    scale = 4
-    octave = 3
+    scale = 3
+    octave = 2
 
-    results = DoG(img, scale, octave)
+    (results, _) = DoG(img, scale, octave, 1.6)
 
     plt.plot([octave,scale])
 
-    for j in range(1,octave):
+    for j in range(0,octave):
         for i in range(0,scale):
             img = results[j][i]
             plt.subplot(octave, scale, 1 + j*scale +i)
-            plt.title(2**(i/scale+j))
+            plt.title(1.6*2**(i/scale+j))
             show(img)
 
     plt.show()
