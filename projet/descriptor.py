@@ -108,9 +108,9 @@ def assignOrientation(img, keypoints):
 
         for j in range(-width, width+1):
             for i in range(-width, width+1):
-                if keypoint[0]+i < 0 or keypoint[0]+i > img.shape[0]-1: # x
+                if keypoint[0]+i < 0 or keypoint[0]+i > img.shape[1]-1: # x
                     continue
-                if keypoint[1]+j < 0 or keypoint[1]+j > img.shape[1]-1: # y
+                if keypoint[1]+j < 0 or keypoint[1]+j > img.shape[0]-1: # y
                     continue
                 angle, length = gradient(img,keypoint[0]+i,keypoint[1]+j)
                 a = int(np.floor(angle)//(360//36))
@@ -131,8 +131,8 @@ def assignOrientation(img, keypoints):
     return orientedKeypoints
 
 def gradient(img,x,y): # img is the corresponding smoothed image
-    dy = img[min(y+1,img.shape[1]-1),x] - img[max(y-1,0),x]
-    dx = img[y,min(x+1,img.shape[0]-1)] - img[y,max(x-1,0)]
+    dy = img[min(y+1,img.shape[0]-1),x] - img[max(y-1,0),x]
+    dx = img[y,min(x+1,img.shape[1]-1)] - img[y,max(x-1,0)]
 
     angleRad = np.arctan2(dy,dx)
     anglePol = (angleRad+np.pi)*180.0/np.pi
