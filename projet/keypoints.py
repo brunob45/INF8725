@@ -115,13 +115,16 @@ def getKeyPoints(down,dog,up, s, o):
     print("Surviving candidates:", len(survivants))
     return survivants
 
+def getOriginalCoordinates(c,o):
+    return c*pow(2,o)
+
 if __name__ == '__main__':
     img = openImage('Lenna.jpg')
 
     octave = 4
     scale = 6
 
-    results,imgs = DoG(img, scale, octave)
+    results = DoG(img, scale, octave)
 
     plt.plot([octave,scale])
 
@@ -132,12 +135,12 @@ if __name__ == '__main__':
             survivants = getKeyPoints(results[s-1 + o * scale],results[s + o * scale],results[s+1 + o * scale], s, o)
 
             plt.subplot(octave, scale, 1 + o*scale +s)
-            show(img)
+            show(openImage('Lenna.jpg'))
 
             x, y = [], []
             for i,j,s in survivants:
-                x.append(i)
-                y.append(j)
+                x.append(getOriginalCoordinates(i,o))
+                y.append(getOriginalCoordinates(j,o))
 
             plt.autoscale(False)
             plt.plot(x,y, 'bo', markersize=2)
