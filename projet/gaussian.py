@@ -32,7 +32,7 @@ if __name__ == '__main__':
         for i in range(scale):
             plt.subplot(octave, scale, 1 + j*scale +i)
             plt.title(sigma * 2**(i/scale+j))
-            show(o[i+1]-o[i])
+            show(o[i])
         img = resize(o[scale])
 
     plt.show()

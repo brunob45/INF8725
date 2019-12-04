@@ -14,7 +14,8 @@ def get_dog_octave(img, scale, sigma=1.0):
     imgs = get_octave(img, scale, sigma)
 
     for i in range(1, len(imgs)):
-        octave.append(imgs[i] - imgs[i-1])   #difference of Gaussian
+        octave.append(normalizeDoG(imgs[i], imgs[i-1]))
+        # octave.append(imgs[i] - imgs[i-1])   #difference of Gaussian
 
     return (octave, imgs[scale])
 
@@ -23,8 +24,12 @@ def DoG(img, scale, nb_octave):
     for _ in range(0,nb_octave):
         (octave, img) = get_dog_octave(img, scale)
         diffs.append(octave)
-        img = resize(octave[scale])
+        img = resize(img)
     return diffs
+
+def normalizeDoG(img,cpy):
+    dog = img-cpy
+    return (dog-np.min(dog))/(np.max(dog)-np.min(dog))
 
 if __name__ == '__main__':
     img = openImage('Lenna.jpg')
