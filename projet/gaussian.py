@@ -9,24 +9,30 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 
-def applyGaussian(img, i, s):
-    return gaussian_filter(img, sigma=2**(i/s))
+def applyGaussian(img, scale, sigma=1.0):
+    return gaussian_filter(img, sigma=sigma * 2**(1/scale))
 
+def get_octave(img, scale, sigma=1.0):
+    octave = [img]
+    for s in range(1, scale+3):
+        octave.append(applyGaussian(octave[-1], scale, sigma))
+    return octave
 
 if __name__ == '__main__':
-    img = openImage('droite.jpg')
-    scale = 3
-    octave = 2
+    img = openImage('Lenna.jpg')
+    scale = 4
+    octave = 3
+    sigma = 1.0
 
     plt.plot([octave,scale])
 
-    for j in range(0,octave):
-        tmp = img
-        for i in range(0,scale):
-            tmp = applyGaussian(tmp, i, scale)
+    for j in range(0, octave):
+        o = get_octave(img, scale, sigma)
+
+        for i in range(scale):
             plt.subplot(octave, scale, 1 + j*scale +i)
-            plt.title(2**(i/scale+j))
-            show(tmp)
-        img = resize(img)
+            plt.title(sigma * 2**(i/scale+j))
+            show(o[i])
+        img = resize(o[scale])
 
     plt.show()

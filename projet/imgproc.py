@@ -9,7 +9,9 @@ def openImage(filename):
     return img / np.max(img)
 
 def show(img):
-    plt.imshow(img, cmap='gray')#, vmin=0, vmax=255)
+    if type(img) is Image.Image:
+        img = np.array(img)
+    plt.imshow(img, cmap='gray')
 
 def resize(myImg):
     if type(myImg) is np.ndarray:
@@ -27,7 +29,7 @@ if __name__ == '__main__':
     plt.subplot(1, 3, 2)
     img = resize(img)
     show(img)
-    
+
     plt.subplot(1, 3, 3)
     img = resize(img)
     show(img)
