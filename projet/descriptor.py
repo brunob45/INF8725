@@ -10,7 +10,7 @@ def descriptionPointsCles(img, keypoints):
     descriptors = []
 
     for keypoint in keypoints:
-        pass
+        descriptors.append(createDescriptor(img, keypoint))
 
 
     return descriptors
@@ -20,19 +20,66 @@ def createDescriptor(img, keypoint):
     descriptor.append[keypoint[0]]
     descriptor.append[keypoint[1]]
 
+    # filtre gaussien
+    x = np.linspace(-keypoint[2]*1.5, keypoint[2]*1.5, 16)
+    d1 = np.diff(norm.cdf(x))
+    d2 = np.outer(d1, d1)
+    gaussianFilter = (d2/d2.sum())
+
+    # extraction de la patch, rotation
+    patch = rotate(keypoint[3], getPatch(img,x,y, 16))
+    gradPatch = np.zeros((16,16))
+
+    # Calcul du gradient et application du point gaussien
+    for i in range(0,16):
+        for j in range(0,16):
+            a,l = gradient(patch,i,j)
+            gradPatch[i][j] = (a,l*gaussian_filter[i][j])
+
+    # Division en 4x4 sous-régions
+    subregions = []
+
+    for s in range(0,4):
+        startx = 0
+        starty = 4
+        subregion = np.zeros((4,4))
+
+        for i in range(startx,startx+4):
+            for j in range(starty,starty+4):
+                subregion[i - startx][j - starty] = gradPatch[i][j]
+
+        if startx != 16:
+            startx += 4
+        else:
+           if starty != 16:
+               starty += 4
+               startx = 0
 
 
+        subregions.append(subregion)
+
+    # Création des 8 histogrammes par sous-régions
 
     return descriptor
+
+def getPatch(img, x,y, size):
+    patch = np.zeros((size,size))
+    for i in range(0,size):
+        for j in range(0,size):
+            patch[i][j] = img[x-(size/2)+i][y-(size/2)+j]
+
+    return patch
+
+def rotate(angle, mat):
+    rotMat = np.array((np.cos(np.radians(angle)), -np.sin(np.radians(angle)), np.sin(np.radians(angle)), np.cos(np.radians(angle))))
+    return rotMat.dot(mat)
 
 def assignOrientation(img, keypoints):
     orientedKeypoints = []
 
     for keypoint in keypoints:
         width = int(2*np.ceil(keypoint[2]*1.5)+1)
-        #gaussian = gaussian_filter(np.ones((2*width+1,2*width+1)),keypoint[2]*1.5)
         x = np.linspace(-keypoint[2]*1.5, keypoint[2]*1.5, 2*width+2)
-        #x = np.linspace(-2.5, 2.5, 5+1)
         d1 = np.diff(norm.cdf(x))
         d2 = np.outer(d1, d1)
         gaussianFilter = (d2/d2.sum())
@@ -92,6 +139,8 @@ def fitParabola(hist, indexMax): #10
 
 if __name__ == '__main__':
     img = openImage('Lenna.jpg')
+    
+    getPatch(img,24,30)
 
     octave = 3
     scale = 4
