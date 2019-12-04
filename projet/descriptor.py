@@ -1,6 +1,6 @@
 from imgproc import openImage, show, resize
 from dog import DoG
-from keypoints import getKeyPoints
+from keypoints import getKeyPoints, getOriginalCoordinates
 from scipy.stats import norm
 from scipy.ndimage import gaussian_filter
 import numpy as np
@@ -49,9 +49,16 @@ def assignOrientation(img, keypoints):
                 w = gaussianFilter[j+width, i+width]*length
                 hist[a] += w
 
-        #for # bin
+        # index du max dans hist
+        indexMax = 0;
+        for i in range(0,hist.__len__()):
+            if hist[i] > hist[indexMax]:
+                indexMax = i
 
-        orientedKeypoints.append((keypoint[0], keypoint[1], keypoint[2], angle, length))
+        maxValue = hist[indexMax] # length
+        xmax = fitParabola(hist, indexMax) # angle
+
+        orientedKeypoints.append((keypoint[0], keypoint[1], keypoint[2], xmax, maxValue))
 
     return orientedKeypoints
 
@@ -65,13 +72,31 @@ def gradient(img,x,y): # img is the corresponding smoothed image
 
     return anglePol, length
 
+def fitParabola(hist, indexMax): #10
+    if indexMax == 0:
+        x1 = -5
+        y1 = hist[0]
+    else:
+        x1 = (indexMax - 1)*10+5
+        y1 = hist[indexMax - 1]
+    x2 = indexMax*10+5
+    y2 = hist[indexMax]
+    if indexMax == hist.__len__()-1:
+        x3 = hist.__len__()*10+5
+        y3 = hist[hist.__len__()-1]
+    else:
+        x3 = (indexMax + 1)*10+5
+        y3 = hist[indexMax + 1]
+
+    return (x2 + 0.5*((y1-y2)*pow((x3-x2),2)-(y3-y2)*pow((x2-x1),2))/((y1-y2)*(x3-x2)+(y3-y2)*(x2-x1)))
+
 if __name__ == '__main__':
     img = openImage('Lenna.jpg')
 
     octave = 3
     scale = 4
 
-    results,imgs = DoG(img, scale, octave)
+    results = DoG(img, scale, octave)
 
     plt.plot([octave,scale])
 
@@ -80,19 +105,16 @@ if __name__ == '__main__':
             print(o, s)
             img = results[s + o * scale]
             survivants = getKeyPoints(results[s-1 + o * scale],results[s + o * scale],results[s+1 + o * scale], s, o)
-            keypoints = assignOrientation(imgs[s + o * scale], survivants)
+            keypoints = assignOrientation(results[s + o * scale], survivants)
 
             plt.subplot(octave, scale, 1 + o*scale+s)
-            show(img) # show scalled image instead of original
+            show(openImage('Lenna.jpg'))
 
             x, y = [], []
-            for i,j,s in keypoints:
-                #if s > 1:
-                    #x.append(i*pow(2,o*scale+s-1))
-                    #y.append(j*pow(2,o*scale+s-1))
-                #else:
-                x.append(i)
-                y.append(j)
+            for i,j,s,a,l in keypoints:                
+                x.append(getOriginalCoordinates(i,o))
+                y.append(getOriginalCoordinates(j,o))
+                print("x : ", i, ", y : ", j, ", angle :", a, ", length : ", l)
 
             plt.autoscale(False)
             plt.plot(x,y, 'bo', markersize=2)
