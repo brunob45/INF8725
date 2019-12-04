@@ -10,29 +10,97 @@ def descriptionPointsCles(img, keypoints):
     descriptors = []
 
     for keypoint in keypoints:
-        pass
-
+        descriptors.append(createDescriptor(img, keypoint))
 
     return descriptors
 
 def createDescriptor(img, keypoint):
     descriptor = []
-    descriptor.append[keypoint[0]]
-    descriptor.append[keypoint[1]]
+
+    # filtre gaussien
+    x = np.linspace(-keypoint[2]*1.5, keypoint[2]*1.5, 17)
+    d1 = np.diff(norm.cdf(x))
+    d2 = np.outer(d1, d1)
+    gaussianFilter = (d2/d2.sum())
+
+    # extraction de la patch, rotation
+    patch = rotate(keypoint[3], getPatch(img,keypoint[0],keypoint[1], 16))
+    gradPatch = np.empty((16,16), dtype=object)
+
+    # Calcul du gradient et application du point gaussien
+    for i in range(0,16):
+        for j in range(0,16):
+            a,l = gradient(patch,i,j)
+            w = l*gaussianFilter[i][j]
+            gradPatch[i][j] = (a,w)
+
+    # Division en 4x4 sous-régions
+    subregions = []
+
+    for region in range(0,4):
+        startx = 0
+        starty = 4
+        subregion = np.empty((4,4), dtype=object)
+
+        for i in range(startx,startx+4):
+            for j in range(starty,starty+4):
+                subregion[i - startx][j - starty] = gradPatch[i][j]
+
+        if startx != 16:
+            startx += 4
+        else:
+           if starty != 16:
+               starty += 4
+               startx = 0
 
 
+        subregions.append(subregion)
 
+    # Création des histogrammes
+    hists = []
+
+    for region in range(0,4):
+        hist = np.zeros(8, dtype=np.float)
+        for i in range(0,4):
+            for j in range(0,4):
+                a,l = subregions[region][i][j]
+                test = int(np.floor(359)//(360//8))
+                angle = int(np.floor(a)//(360//8))
+                if angle == 8:
+                    angle = 7
+                hist[angle] += l
+        hists.append(hist)
+
+    # Construction du descripteur
+    descriptor.append(keypoint[0]) # x
+    descriptor.append(keypoint[1]) # y
+
+    for hist in range(0,hists.__len__()):
+        for value in range(0, 8):
+            descriptor.append(hists[hist][value])
 
     return descriptor
+
+def getPatch(img, x,y, size):
+    patch = np.zeros((size,size))
+    for i in range(0,size):
+        for j in range(0,size):
+            if x-int(np.floor(size/2))+i < img.shape[0] and x-int(np.floor(size/2))+i > 0 and y-int(np.floor(size/2))+j < img.shape[1] and y-int(np.floor(size/2))+j > 0:
+                patch[i][j] = img[x-int(np.floor(size/2))+i][y-int(np.floor(size/2))+j]
+
+    return patch
+
+def rotate(angle, mat):
+    #rotMat = np.array((np.cos(np.radians(angle)), -np.sin(np.radians(angle)), np.sin(np.radians(angle)), np.cos(np.radians(angle))))
+    #return rotMat.dot(mat)
+    return mat
 
 def assignOrientation(img, keypoints):
     orientedKeypoints = []
 
     for keypoint in keypoints:
         width = int(2*np.ceil(keypoint[2]*1.5)+1)
-        #gaussian = gaussian_filter(np.ones((2*width+1,2*width+1)),keypoint[2]*1.5)
         x = np.linspace(-keypoint[2]*1.5, keypoint[2]*1.5, 2*width+2)
-        #x = np.linspace(-2.5, 2.5, 5+1)
         d1 = np.diff(norm.cdf(x))
         d2 = np.outer(d1, d1)
         gaussianFilter = (d2/d2.sum())
@@ -91,33 +159,44 @@ def fitParabola(hist, indexMax): #10
     return (x2 + 0.5*((y1-y2)*pow((x3-x2),2)-(y3-y2)*pow((x2-x1),2))/((y1-y2)*(x3-x2)+(y3-y2)*(x2-x1)))
 
 if __name__ == '__main__':
+
     img = openImage('Lenna.jpg')
 
     octave = 3
     scale = 4
 
-    results = DoG(img, scale, octave)
+    (diffs, imgs) = DoG(img, scale, octave)
 
-    plt.plot([octave,scale])
+    plt.plot([1,octave])
+
+    descriptors = []
 
     for o in range(0,octave):
-        for s in range(1,scale-1):
+        survivants = []
+        for s in range(0,scale):
             print(o, s)
-            img = results[s + o * scale]
-            survivants = getKeyPoints(results[s-1 + o * scale],results[s + o * scale],results[s+1 + o * scale], s, o)
-            keypoints = assignOrientation(results[s + o * scale], survivants)
+            sigma = 2**(1/scale)
+            survivants += getKeyPoints(diffs[o][s],diffs[o][s+1],diffs[o][s+2], sigma)
 
-            plt.subplot(octave, scale, 1 + o*scale+s)
-            show(openImage('Lenna.jpg'))
+        keypoints = assignOrientation(diffs[o][s+1], survivants)
+        octaveDescriptors = descriptionPointsCles(imgs[o][s+1], keypoints)
+        descriptors.extend(octaveDescriptors)
 
-            x, y = [], []
-            for i,j,s,a,l in keypoints:                
-                x.append(getOriginalCoordinates(i,o))
-                y.append(getOriginalCoordinates(j,o))
-                print("x : ", i, ", y : ", j, ", angle :", a, ", length : ", l)
+        plt.subplot(1, octave, 1 + o)
+        
+        #show(imgs[o][0])
+        show(openImage('Lenna.jpg'))
 
-            plt.autoscale(False)
-            plt.plot(x,y, 'bo', markersize=2)
+        x, y = [], []
+        for (i,j,s,a,l) in keypoints:
+            x.append(getOriginalCoordinates(i,o))
+            y.append(getOriginalCoordinates(j,o))
+            print("x : ", i, ", y : ", j, ", angle :", a, ", length : ", l)
 
-    
+        plt.title(o)
+        plt.autoscale(False)
+        plt.plot(x,y, 'bo', markersize=2)
+
+    d = descriptors[12]
+
     plt.show()
