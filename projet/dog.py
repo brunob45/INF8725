@@ -12,10 +12,9 @@ from gaussian import applys0, get_octave
 def get_dog_octave(img, scale):
     octave = []
     imgs = get_octave(img, scale)
-
+    # create the difference of gaussian for a full octave
     for i in range(1, len(imgs)):
         octave.append(normalizeDoG(imgs[i], imgs[i-1]))
-        # octave.append(imgs[i] - imgs[i-1])   #difference of Gaussian
 
     return (octave, imgs)
 
@@ -24,16 +23,18 @@ def differenceDeGaussiennes(image_initiale, s, nb_octave):
     imgs = []
 
     img = image_initiale
+    # get the full DoG pyramid
     for _ in range(0,nb_octave):
         (octave, i) = get_dog_octave(img, s)
         diffs.append(octave)
         imgs.append(i)
-
+        # downscale the image
         img = resize(i[s])
 
     return (diffs, imgs)
 
 def normalizeDoG(img,cpy):
+    # normalize the value of the dog to find extrema (otherwise, the minimums and maximums are all in the scales above or below)
     dog = img-cpy
     return (dog-np.min(dog))/(np.max(dog)-np.min(dog))
 

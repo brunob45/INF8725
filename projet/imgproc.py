@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
 
+# This file contain utilities to open images, show them with imshow and resize an array
+
 def openImage(filename):
     img = Image.open(filename).convert('L')
     return img / np.max(img)

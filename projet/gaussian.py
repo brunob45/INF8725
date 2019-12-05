@@ -9,12 +9,15 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 def applys0(img, s0):
+    # apply the first gaussian filter
     return gaussian_filter(img, sigma=s0)
 
 def applyGaussian(img, scale):
+    # apply following gaussian filter
     return gaussian_filter(img, sigma=2**(1/scale))
 
 def get_octave(img, scale):
+    # apply the gaussian filter for a full octave
     octave = [img]
     for s in range(1, scale+3):
         octave.append(applyGaussian(octave[-1], scale))

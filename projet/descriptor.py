@@ -91,6 +91,7 @@ def getPatch(img, x,y, size):
     return patch
 
 def rotate(angle, mat):
+    # code pour appliquer une rotation à un patch de pixel, ne fonctionne pas
     #rotMat = np.array((np.cos(np.radians(angle)), -np.sin(np.radians(angle)), np.sin(np.radians(angle)), np.cos(np.radians(angle))))
     #return rotMat.dot(mat)
     return mat
@@ -99,6 +100,8 @@ def assignOrientation(img, keypoints):
     orientedKeypoints = []
 
     for keypoint in keypoints:
+
+        # filtre gaussien
         width = int(2*np.ceil(keypoint[2]*1.5)+1)
         x = np.linspace(-keypoint[2]*1.5, keypoint[2]*1.5, 2*width+2)
         d1 = np.diff(norm.cdf(x))
@@ -106,6 +109,7 @@ def assignOrientation(img, keypoints):
         gaussianFilter = (d2/d2.sum())
         hist = np.zeros(36, dtype=np.float)
 
+        # création des histogrammes
         for j in range(-width, width+1):
             for i in range(-width, width+1):
                 if keypoint[0]+i < 0 or keypoint[0]+i > img.shape[1]-1: # x
@@ -134,21 +138,28 @@ def gradient(img,x,y): # img is the corresponding smoothed image
     dy = img[min(y+1,img.shape[0]-1),x] - img[max(y-1,0),x]
     dx = img[y,min(x+1,img.shape[1]-1)] - img[y,max(x-1,0)]
 
+    # changement de radian à polaire
     angleRad = np.arctan2(dy,dx)
     anglePol = (angleRad+np.pi)*180.0/np.pi
+
     length = np.sqrt(pow(dx,2)+pow(dy,2))
 
     return anglePol, length
 
 def fitParabola(hist, indexMax): #10
+    # left point
     if indexMax == 0:
         x1 = -5
         y1 = hist[0]
     else:
         x1 = (indexMax - 1)*10+5
         y1 = hist[indexMax - 1]
+
+    # center point
     x2 = indexMax*10+5
     y2 = hist[indexMax]
+
+    # right point
     if indexMax == hist.__len__()-1:
         x3 = hist.__len__()*10+5
         y3 = hist[hist.__len__()-1]
